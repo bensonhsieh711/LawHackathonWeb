@@ -11,13 +11,16 @@ import { Button } from '@material-ui/core';
 import Input from '@material-ui/core/Input';
 import { RaisedButton } from 'material-ui';
 import Checkbox from '@material-ui/core/Checkbox';
-import ListItemText from '@material-ui/core/ListItemText';
 import MultipleSelect from './MultipleSelect'
 import Card from '@material-ui/core/Card';
 import Collapse from '@material-ui/core/Collapse';
 import Link from '@material-ui/core/Link';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const BootstrapInput = withStyles(theme => ({
     root: {
@@ -79,6 +82,8 @@ const MenuProps = {
     },
 };
 
+const medias = ['PTT', 'TVBS', 'ETTODAY'];
+
 class CustomizedSelects extends React.Component {
     state = {
         search: '',
@@ -87,6 +92,7 @@ class CustomizedSelects extends React.Component {
         searchAreaExpend: true,
         resultAreaExpend: false,
         open: false,
+        newsContent: '',
     };
 
     handleChange = event => {
@@ -108,10 +114,15 @@ class CustomizedSelects extends React.Component {
         this.setState({ open: false })
     }
 
-    handleOpen = (eventName) => {
-        this.setState({ 
+    handleOpen = () => {
+        this.setState({
             open: true,
+            //newsContent: news
         })
+    }
+
+    handleListItemClick(value) {
+        //onClose(value);
     }
 
     render() {
@@ -143,12 +154,17 @@ class CustomizedSelects extends React.Component {
                     <Button onClick={this.handleOpen}>案件一</Button>
                     <Button onClick={this.handleOpen}>案件二</Button>
                     <Button onClick={this.handleOpen}>案件三</Button>
+                    <Button onClick={this.handleOpen}>案件四</Button>
                     <Dialog onClose={this.handleClose}
                         aria-labelledby="customized-dialog-title"
                         open={this.state.open}>
                         <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
-                           新聞相關連結
-                        </DialogTitle>                        
+                            <List>
+                                <ListItem button onClick={this.handleListItemClick('url')} key={''}>
+                                    <ListItemText primary={this.state.newsContent} />
+                                </ListItem>
+                            </List>
+                        </DialogTitle>
                     </Dialog>
                     <Button variant="contained" color="primary" className={classes.margin} onClick={this.relativeSearchOnClick}>
                         返回搜尋

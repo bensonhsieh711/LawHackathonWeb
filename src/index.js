@@ -55,7 +55,8 @@ class App extends React.Component {
                   <MenuItem primaryText="Sign out" />
                         </Menu> */}
                 </Popover>
-                <AppBar title='法律黑客松' onClick={this.handleTouchTap} />
+                <AppBar style={{ fontFamily: 'Microsoft JhengHei' }}
+                    title='莫訟 No-Suit' onClick={this.handleTouchTap} />
                 {/* <img src={url} width={'80%'} height={'100%'} /> */}
                 <Selects />
             </MuiThemeProvider>

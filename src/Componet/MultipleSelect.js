@@ -49,7 +49,7 @@ function MultipleSelect() {
 
   return (
     <FormControl>
-      <InputLabel htmlFor="select-multiple-checkbox">關鍵字</InputLabel>
+      <InputLabel htmlFor="select-multiple-checkbox">請選擇</InputLabel>
       <Select
         multiple
         value={personName}
