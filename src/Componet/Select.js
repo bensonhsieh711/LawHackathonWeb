@@ -127,6 +127,11 @@ class CustomizedSelects extends React.Component {
 
     render() {
         const { classes } = this.props;
+        var mediaList = medias.map((media) =>
+            <ListItem button onClick={this.handleListItemClick('url')} key={media}>
+                <ListItemText primary={media} />
+            </ListItem>
+        );
 
         return (
             <Card>
@@ -160,9 +165,7 @@ class CustomizedSelects extends React.Component {
                         open={this.state.open}>
                         <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
                             <List>
-                                <ListItem button onClick={this.handleListItemClick('url')} key={''}>
-                                    <ListItemText primary={this.state.newsContent} />
-                                </ListItem>
+                                {mediaList}                                
                             </List>
                         </DialogTitle>
                     </Dialog>
