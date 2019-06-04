@@ -84,21 +84,22 @@ const MenuProps = {
 
 //const medias = ['PTT', 'TVBS', 'ETTODAY'];
 const pttUrl = [
-    { '牛郎喝到酒精中毒亡 法院首次': 'https://www.ptt.cc/bbs/Gossiping/M.1559175089.A.5CF.html' },
-    { '派遣工淚哭法院爭權益 控告': 'https://www.ptt.cc/bbs/Gossiping/M.1559552992.A.FAA.html' },
-    { '勇警張景義開槍擊斃拒捕竊賊': 'https://www.ptt.cc/bbs/Gossiping/M.1559196474.A.E18.html' },
+    ['牛郎喝到酒精中毒亡 法院首次', 'https://www.ptt.cc/bbs/Gossiping/M.1559175089.A.5CF.html'],
+    ['派遣工淚哭法院爭權益 控告', 'https://www.ptt.cc/bbs/Gossiping/M.1559552992.A.FAA.html'],
+    ['勇警張景義開槍擊斃拒捕竊賊', 'https://www.ptt.cc/bbs/Gossiping/M.1559196474.A.E18.html'],
 ];
 
+
 const ettodayUrl = [
-    { '遭監院彈劾草率起訴獲判免懲戒': 'https://www.ettoday.net/news/20190603/1459330.htm' },
-    { '購物中心員工偷拍女同事裙底': 'https://www.ettoday.net/news/20190603/1459043.htm' },
-    { '小三裸照嗆聲！老公養了她的孩子　': 'https://www.ettoday.net/news/20190603/1459226.htm' },
+    ['遭監院彈劾草率起訴獲判免懲戒', 'https://www.ettoday.net/news/20190603/1459330.htm'],
+    ['購物中心員工偷拍女同事裙底', 'https://www.ettoday.net/news/20190603/1459043.htm'],
+    ['小三裸照嗆聲！老公養了她的孩子', 'https://www.ettoday.net/news/20190603/1459226.htm'],
 ];
 
 const tvbsUrl = [
-    { '女控刺青圖醜求償敗訴': 'https://news.tvbs.com.tw/local/1143610' },
-    { '男借竹竿摘芒果摔死': 'https://news.tvbs.com.tw/local/1127982' },
-    { '揭女童疑天天遭哥性侵': 'https://news.tvbs.com.tw/tech/1130420' },
+    ['女控刺青圖醜求償敗訴', 'https://news.tvbs.com.tw/local/1143610'],
+    ['男借竹竿摘芒果摔死', 'https://news.tvbs.com.tw/local/1127982'],
+    ['揭女童疑天天遭哥性侵', 'https://news.tvbs.com.tw/tech/1130420'],
 ];
 
 class CustomizedSelects extends React.Component {
@@ -146,15 +147,15 @@ class CustomizedSelects extends React.Component {
         const { classes } = this.props;
 
         var pttLinkList = pttUrl.map((url) =>
-            <li><a target="_blank" href={Object.values(url)}>{Object.keys(url)}</a></li>
+            <li><a target="_blank" href={url[1]}>{url[0]}</a></li>
         );
 
         var tvbsLinkList = tvbsUrl.map((url, idx) =>
-            <li><a target="_blank" href={Object.values(url)}>{Object.keys(url)}</a></li>
+            <li><a target="_blank" href={url[1]}>{url[0]}</a></li>
         );
 
         var ettodayLinkList = ettodayUrl.map((url, idx) =>
-            <li><a target="_blank" href={Object.values(url)}>{Object.keys(url)}</a></li>
+            <li><a target="_blank" href={url[1]}>{url[0]}</a></li>
         );
 
         return (
