@@ -21,6 +21,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
+import axios from 'axios'
 
 const BootstrapInput = withStyles(theme => ({
     root: {
@@ -119,6 +120,13 @@ class CustomizedSelects extends React.Component {
 
     keywordSearchchOnClick = () => {
         this.setState({ showCatagory: !this.state.showCatagory });
+        axios.post(`localhost:3200/casigo/account/read`,
+            { "year": 2002 }
+        ).then(res => {
+            console.log(res.data);
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     relativeSearchOnClick = () => {
