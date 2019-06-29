@@ -120,8 +120,8 @@ class CustomizedSelects extends React.Component {
 
     keywordSearchchOnClick = () => {
         this.setState({ showCatagory: !this.state.showCatagory });
-        axios.post(`localhost:3200/casigo/account/read`,
-            { "year": 2002 }
+        axios.post(`http://35.234.24.135:3200/casigo/account/read`,
+             { "runtime": 144, "year": 1975, "rated": "R" }
         ).then(res => {
             console.log(res.data);
         }).catch((err) => {
