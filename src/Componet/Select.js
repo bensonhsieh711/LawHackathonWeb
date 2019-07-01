@@ -120,12 +120,17 @@ class CustomizedSelects extends React.Component {
 
     keywordSearchchOnClick = () => {
         this.setState({ showCatagory: !this.state.showCatagory });
+    }
+
+    mongoTest = () => {
         axios.post(`http://35.234.24.135:3200/casigo/account/read`,
-             { "runtime": 144, "year": 1975, "rated": "R" }
+            { "runtime": 144, "year": 1975, "rated": "R" }
         ).then(res => {
             console.log(res.data);
+            alert('Success!')
         }).catch((err) => {
             console.log(err);
+            alert('Fail!')
         })
     }
 
@@ -186,6 +191,9 @@ class CustomizedSelects extends React.Component {
                     </Button>
                     <Button variant="contained" color="primary" className={classes.margin} onClick={this.relativeSearchOnClick}>
                         搜尋相關結果
+                    </Button>
+                    <Button variant="contained" color="primary" className={classes.margin} onClick={this.mongoTest}>
+                        Mongo Test
                     </Button>
                 </Collapse>
                 <Collapse in={this.state.resultAreaExpend}>
