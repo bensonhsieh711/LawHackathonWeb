@@ -11,7 +11,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
+import Avatar from '@material-ui/core/Avatar';
 import Selects from './Componet/Select'
+import logo from './MosongLogo.png'
 
 class App extends React.Component {
     constructor(props) {
@@ -38,26 +40,29 @@ class App extends React.Component {
     };
 
     render() {
+        console.log(logo);
         return (
             <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-                <Popover
+                {/* <Popover
                     open={this.state.open}
                     anchorEl={this.state.anchorEl}
                     anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
                     targetOrigin={{ horizontal: 'left', vertical: 'top' }}
                     onRequestClose={this.handleRequestClose}
                 >
-                    {/* <Menu>
+                    <Menu>
                             <MenuItem primaryText="CV" />
                             <MenuItem primaryText="Contact me" />
                             <MenuItem primaryText="Help &amp; feedback" />
                   <MenuItem primaryText="Settings" />
                   <MenuItem primaryText="Sign out" />
-                        </Menu> */}
-                </Popover>
-                <AppBar style={{ fontFamily: 'Microsoft JhengHei' }}
-                    title='莫訟 No-Suit' onClick={this.handleTouchTap} />
-                {/* <img src={url} width={'80%'} height={'100%'} /> */}
+                        </Menu>
+                </Popover> */}
+                {/* <AppBar style={{ fontFamily: 'Microsoft JhengHei' }}
+                    title='莫訟 No-Suit' onClick={this.handleTouchTap} /> */}
+                {/* <img src='src/MosongLogo.png' width={'80%'} height={'100%'} /> */}
+                <img src={logo} alt="Logo" width={'5%'} height={'20%'} />
+                <h1>莫訟 No-Suit</h1>
                 <Selects />
             </MuiThemeProvider>
         );
