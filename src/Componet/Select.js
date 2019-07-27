@@ -4,23 +4,24 @@ import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import NativeSelect from '@material-ui/core/NativeSelect';
+// import Select from '@material-ui/core/Select';
+// import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 import { Button } from '@material-ui/core';
 import Input from '@material-ui/core/Input';
-import { RaisedButton } from 'material-ui';
-import Checkbox from '@material-ui/core/Checkbox';
+// import { RaisedButton } from 'material-ui';
+// import Checkbox from '@material-ui/core/Checkbox';
 import MultipleSelect from './MultipleSelect'
 import Card from '@material-ui/core/Card';
 import Collapse from '@material-ui/core/Collapse';
-import Link from '@material-ui/core/Link';
+// import Link from '@material-ui/core/Link';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
+// import List from '@material-ui/core/List';
+// import ListItem from '@material-ui/core/ListItem';
+// import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+// import ListItemText from '@material-ui/core/ListItemText';
+// import TextField from '@material-ui/core/TextField';
 import axios from 'axios'
 
 const BootstrapInput = withStyles(theme => ({
@@ -114,17 +115,18 @@ class CustomizedSelects extends React.Component {
         newsContent: '',
     };
 
-    handleChange = event => {
-        this.setState({ search: event.target.value });
-    };
+    handleChange = (e) => {
+        this.setState({ search: e.target.value });
+    }
 
     keywordSearchchOnClick = () => {
         this.setState({ showCatagory: !this.state.showCatagory });
     }
 
     mongoTest = () => {
-        axios.post(`http://35.234.24.135:3200/casigo/account/read`,
-            { "runtime": 144, "year": 1975, "rated": "R" }
+        var keyword = this.state.search;
+        axios.post(`http://35.234.24.135:3200/casigo/account/fuzzyread`,
+            { "opinion": keyword, "mainText": keyword, "reason": keyword }
         ).then(res => {
             console.log(res.data);
             alert('Success!')
@@ -179,7 +181,10 @@ class CustomizedSelects extends React.Component {
                             <InputLabel htmlFor="search-customized-select" className={classes.bootstrapFormLabel}>
                                 輸入關鍵字
                             </InputLabel>
-                            <BootstrapInput />
+                            <BootstrapInput
+                                value={this.state.search}
+                                onChange={this.handleChange}
+                            />
                         </FormControl>
                         <FormControl className={classes.margin}>
                             <InputLabel htmlFor="search-customized-select" className={classes.bootstrapFormLabel} />
