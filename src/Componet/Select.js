@@ -113,6 +113,7 @@ class CustomizedSelects extends React.Component {
         resultAreaExpend: false,
         open: false,
         newsContent: '',
+        verdictList: [],
     };
 
     handleChange = (e) => {
@@ -125,7 +126,7 @@ class CustomizedSelects extends React.Component {
 
     mongoTest = () => {
         var keyword = this.state.search;
-        axios.post(`http://35.234.24.135:3200/casigo/account/fuzzyread`,
+        axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
             { "opinion": keyword, "mainText": keyword, "reason": keyword }
         ).then(res => {
             console.log(res.data);
@@ -137,10 +138,18 @@ class CustomizedSelects extends React.Component {
     }
 
     relativeSearchOnClick = () => {
-        this.setState({
-            searchAreaExpend: !this.state.searchAreaExpend,
-            resultAreaExpend: !this.state.resultAreaExpend
-        });
+        var keyword = this.state.search;
+        axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
+            { "opinion": keyword, "mainText": keyword, "reason": keyword }
+        ).then(res => {
+            this.setState({
+                searchAreaExpend: !this.state.searchAreaExpend,
+                resultAreaExpend: !this.state.resultAreaExpend,
+                verdictList: res.data
+            })
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     handleClose = () => {
@@ -202,10 +211,15 @@ class CustomizedSelects extends React.Component {
                     </Button>
                 </Collapse>
                 <Collapse in={this.state.resultAreaExpend}>
-                    <Button onClick={this.handleOpen}>案件一</Button>
+                    {/* <Button onClick={this.handleOpen}>案件一</Button>
                     <Button onClick={this.handleOpen}>案件二</Button>
                     <Button onClick={this.handleOpen}>案件三</Button>
-                    <Button onClick={this.handleOpen}>案件四</Button>
+                    <Button onClick={this.handleOpen}>案件四</Button> */}
+                    <ul>
+                        {this.state.verdictList.map((verdict) =>
+                            <li onClick={this.handleOpen}>{verdict.no}：{verdict.mainText}</li>
+                        )}
+                    </ul>
                     <Dialog onClose={this.handleClose}
                         aria-labelledby="customized-dialog-title"
                         open={this.state.open}>
