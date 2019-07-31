@@ -263,7 +263,7 @@ class SearchPage extends React.Component {
                                     </FormControl>
                                     <FormControl className={classes.margin}>
                                         <InputLabel htmlFor="search-customized-select" className={classes.bootstrapFormLabel} />
-                                        {this.state.showCatagory == true ? <MultipleSelect /> : null}
+                                        {this.state.showCatagory === true ? <MultipleSelect /> : null}
                                     </FormControl>
                                 </form>
                                 <Button variant="contained" color='secondary' className={classes.margin} onClick={this.keywordSearchchOnClick}>
