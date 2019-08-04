@@ -24,6 +24,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import classnames from 'classnames';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+//import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const BootstrapInput = withStyles(theme => ({
     root: {
@@ -98,6 +102,9 @@ const styles = theme => ({
         //height: 200,
         //width: 200,
     },
+    topic: {
+        color: 'red',
+    }
 });
 
 //const ITEM_HEIGHT = 48;
@@ -138,10 +145,11 @@ class SearchPage extends React.Component {
         name: [],
         searchAreaExpend: true,
         resultAreaExpend: false,
-        verdictContentOpen: false,
+        verdictContentExpend: false,
         newsContent: '',
         verdictList: [],
         dialogOpen: false,
+        verdict: '',
     };
 
     handleChange = (e) => {
@@ -172,8 +180,8 @@ class SearchPage extends React.Component {
         ).then(res => {
             if (res.data) {
                 this.setState({
-                    searchAreaExpend: !this.state.searchAreaExpend,
-                    resultAreaExpend: !this.state.resultAreaExpend,
+                    searchAreaExpend: false,
+                    resultAreaExpend: true,
                     verdictList: res.data
                 })
             } else {
@@ -185,18 +193,29 @@ class SearchPage extends React.Component {
         })
     }
 
-    handleVerdictContentClose = () => {
-        this.setState({ 
-            searchAreaExpend: !this.state.searchAreaExpend,
-            resultAreaExpend: !this.state.resultAreaExpend,
+    handleVerdictListClose = () => {
+        this.setState({
+            searchAreaExpend: true,
+            resultAreaExpend: false,
+            verdictContentExpend: false,
         })
     }
 
-    handleVerdictContentOpen = () => {
-        //console.log(this.state.verdictList[idx]);
+    handleVerdictContentOpen = (verdict) => {
+        console.log(verdict);
         this.setState({
-            //verdictContentOpen: true,
-            dialogOpen: true,
+            verdict: verdict,
+            searchAreaExpend: false,
+            resultAreaExpend: false,
+            verdictContentExpend: true
+        })
+    }
+
+    handleVerdictContentClose = () => {
+        this.setState({
+            searchAreaExpend: false,
+            resultAreaExpend: true,
+            verdictContentExpend: false,
         })
     }
 
@@ -204,35 +223,46 @@ class SearchPage extends React.Component {
         this.setState({ dialogOpen: false })
     }
 
-    handleDialogOpen = () => {
-        this.setState({ dialogOpen: true })
-    }
-
     handleListItemClick(value) {
         //onClose(value);
     }
 
     handleExpandClick = () => {
-        this.setState(state => ({
+        this.setState({
             searchAreaExpend: !this.state.searchAreaExpend,
             resultAreaExpend: !this.state.resultAreaExpend,
-        }));
+        });
     };
+
+    handleDialogOpen = () => {
+        this.setState({ dialogOpen: true })
+    }
 
     render() {
         const { classes } = this.props;
 
-        var pttLinkList = pttUrl.map((url, idx) =>
-            <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
+        let pttLinkList = pttUrl.map((url, idx) =>
+            // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
+            <ListItem component='a' key={idx} target="_blank" href={url[1]}>{url[0]}</ListItem >
         );
 
-        var tvbsLinkList = tvbsUrl.map((url, idx) =>
-            <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
+        let tvbsLinkList = tvbsUrl.map((url, idx) =>
+            // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
+            <ListItem component='a' key={idx} target="_blank" href={url[1]}>{url[0]}</ListItem >
         );
 
-        var ettodayLinkList = ettodayUrl.map((url, idx) =>
-            <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
+        let ettodayLinkList = ettodayUrl.map((url, idx) =>
+            // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
+            <ListItem component='a' key={idx} target="_blank" href={url[1]}>{url[0]}</ListItem >
         );
+
+        let VerdictContent = this.state.verdict ? <p>
+            <b className={classes.topic}>種類</b>:{this.state.verdict.sys}<br />
+            <b className={classes.topic}>文號:</b>{this.state.verdict.no}<br />
+            <b className={classes.topic}>判決內容:</b>{this.state.verdict.judgement}<br /><br />
+            <b className={classes.topic}>法律見解:</b>{this.state.verdict.opinion}<br /><br />
+            <b className={classes.topic}>主要內容:</b>{this.state.verdict.mainText}
+        </p> : null;
 
         return (
             <div>
@@ -297,40 +327,38 @@ class SearchPage extends React.Component {
                     <Button onClick={this.handleOpen}>案件二</Button>
                     <Button onClick={this.handleOpen}>案件三</Button>
                     <Button onClick={this.handleOpen}>案件四</Button> */}
-                            <ul>
+                            <List>
                                 {this.state.verdictList.map((verdict, index) => {
                                     return ([
-                                        <li key={index}>{verdict.no}：{verdict.mainText}
-                                            <IconButton
-                                                className={classnames(classes.expand, {
-                                                    [classes.expandOpen]: this.state.verdictContentOpen,
-                                                })}
-                                                onClick={this.handleVerdictContentOpen}
-                                                aria-expanded={this.state.verdictContentOpen}
-                                                aria-label="Show more"
-                                            >
-                                                <ExpandMoreIcon />
-                                            </IconButton>
-                                        </li>
+                                        <ListItem key={index} button>
+                                            <ListItemText key={index} onClick={() => { this.handleVerdictContentOpen(verdict) }}>{verdict.no}：{verdict.mainText}</ListItemText>
+                                        </ListItem>
                                     ]);
                                 })}
-                            </ul>
+                            </List>
                             <Dialog onClose={this.handleDialogClose}
                                 aria-labelledby="customized-dialog-title"
                                 open={this.state.dialogOpen}>
                                 <DialogTitle id="customized-dialog-title" onClose={this.handleDialogClose}>
-                                    <ul>
-                                        <li>PTT<ul>{pttLinkList}</ul>
-                                        </li>
-                                        <li>TVBS<ul>{tvbsLinkList}</ul>
-                                        </li>
-                                        <li>ETTODAY <ul>{ettodayLinkList}</ul>
-                                        </li>
-                                    </ul>
+                                    <List>
+                                        <ListItem>PTT<List>{pttLinkList}</List>
+                                        </ListItem>
+                                        <ListItem>TVBS<List>{tvbsLinkList}</List>
+                                        </ListItem>
+                                        <ListItem>ETTODAY <List>{ettodayLinkList}</List>
+                                        </ListItem>
+                                    </List>
                                 </DialogTitle>
                             </Dialog>
-                            <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictContentClose}>
+                            <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictListClose}>
                                 返回搜尋</Button>
+                        </Collapse>
+                        <Collapse in={this.state.verdictContentExpend}>
+                            {VerdictContent}
+                            <Button variant="contained" className={classes.margin} onClick={this.handleDialogOpen}>
+                                相關社群文章</Button>
+                            <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictContentClose}>
+                                返回內容</Button>
                         </Collapse>
                     </Card>
                 </Paper>
