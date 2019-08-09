@@ -1,14 +1,16 @@
 {
   "files": {
-    "main.js": "/static/js/main.8e04939f.chunk.js",
-    "main.js.map": "/static/js/main.8e04939f.chunk.js.map",
+    "main.css": "/static/css/main.e88b7dc2.chunk.css",
+    "main.js": "/static/js/main.57c43760.chunk.js",
+    "main.js.map": "/static/js/main.57c43760.chunk.js.map",
     "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
     "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/js/2.ebbe8d50.chunk.js": "/static/js/2.ebbe8d50.chunk.js",
-    "static/js/2.ebbe8d50.chunk.js.map": "/static/js/2.ebbe8d50.chunk.js.map",
+    "static/js/2.98e95bdc.chunk.js": "/static/js/2.98e95bdc.chunk.js",
+    "static/js/2.98e95bdc.chunk.js.map": "/static/js/2.98e95bdc.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.8bae27456d9b9a09da861c132730aedf.js": "/precache-manifest.8bae27456d9b9a09da861c132730aedf.js",
+    "precache-manifest.c20c2675396df46fcfb1ff5266d2aba3.js": "/precache-manifest.c20c2675396df46fcfb1ff5266d2aba3.js",
     "service-worker.js": "/service-worker.js",
+    "static/css/main.e88b7dc2.chunk.css.map": "/static/css/main.e88b7dc2.chunk.css.map",
     "static/media/MosongLogo.png": "/static/media/MosongLogo.fc0fc5e7.png"
   }
 }
