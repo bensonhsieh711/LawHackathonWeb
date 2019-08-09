@@ -3,7 +3,6 @@ import './App.css';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { Route } from 'react-router-dom';
-import { Index } from './Page';
 import SearchPage from './Componet/SearchPage';
 
 const theme = createMuiTheme({
@@ -17,7 +16,8 @@ class App extends React.Component {
     // console.log(this.props.location.search);
     return (
       <MuiThemeProvider theme={theme}>
-        <Route path="/" exact component={Index} />
+        {/* <Route path="/" exact component={Index} /> */}
+        <Route path="/index" render={(props) => <SearchPage {...props} />} />
         <Route path="/search/:keyword" render={(props) => <SearchPage {...props} />} />
       </MuiThemeProvider>
     )

@@ -142,7 +142,8 @@ class SearchPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            keyword: this.props.match.params.keyword,
+            keyword: '',
+            Urlkeyword: this.props.match.params.keyword ? this.props.match.params.keyword : null,
             showCatagory: false,
             name: [],
             searchAreaExpend: true,
@@ -153,12 +154,12 @@ class SearchPage extends React.Component {
             dialogOpen: false,
             verdict: '',
         };
-        //console.log(this.props.match.params.keyword)
+        //console.log(this.props)
     }
 
 
     handleChange = (e) => {
-        this.setState({ search: e.target.value });
+        this.setState({ keyword: e.target.value });
     }
 
     keywordSearchchOnClick = () => {
@@ -178,8 +179,28 @@ class SearchPage extends React.Component {
         })
     }
 
+    autoSearch = (keyword) => {
+        axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
+            { "opinion": keyword, "mainText": keyword, "reason": keyword }
+        ).then(res => {
+            if (res.data) {
+                this.setState({ verdictList: res.data });
+            } else {
+                this.setState({ verdictList: [] });
+                alert("查無結果");
+            }
+        }).catch((err) => {
+            console.log(err);
+        }).finally(() => {
+            this.setState({
+                searchAreaExpend: false,
+                resultAreaExpend: true,
+                Urlkeyword: null,
+            })
+        })
+    }
+
     relativeSearchOnClick = (keyword) => {
-        //var keyword = this.state.search;
         axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
             { "opinion": keyword, "mainText": keyword, "reason": keyword }
         ).then(res => {
@@ -244,8 +265,8 @@ class SearchPage extends React.Component {
     }
 
     render() {
-        if (this.props.match.params.keyword) {
-            this.relativeSearchOnClick(this.state.keyword);
+        if (this.state.Urlkeyword !== null) {
+            this.autoSearch(this.state.Urlkeyword);
         };
 
         const { classes } = this.props;
@@ -307,7 +328,7 @@ class SearchPage extends React.Component {
                                 </form>
                                 <Button variant="contained" color='secondary' className={classes.margin} onClick={this.keywordSearchchOnClick}>
                                     搜尋關鍵字</Button>
-                                <Button variant="contained" color="primary" className={classes.margin} onClick={this.relativeSearchOnClick(this.state.keyword)}>
+                                <Button variant="contained" color="primary" className={classes.margin} onClick={() => this.relativeSearchOnClick(this.state.keyword)}>
                                     搜尋相關結果</Button>
                                 <Button variant="contained" color="primary" className={classes.margin} onClick={this.mongoTest}>
                                     Mongo Test</Button>
