@@ -13,11 +13,9 @@ const theme = createMuiTheme({
 
 class App extends React.Component {
   render() {
-    // console.log(this.props.location.search);
     return (
       <MuiThemeProvider theme={theme}>
-        {/* <Route path="/" exact component={Index} /> */}
-        <Route path="/index" render={(props) => <SearchPage {...props} />} />
+        <Route path="/" exact component={SearchPage} />
         <Route path="/search/:keyword" render={(props) => <SearchPage {...props} />} />
       </MuiThemeProvider>
     )
