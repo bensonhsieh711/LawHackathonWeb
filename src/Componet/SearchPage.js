@@ -139,18 +139,23 @@ const tvbsUrl = [
 ];
 
 class SearchPage extends React.Component {
-    state = {
-        search: '',
-        showCatagory: false,
-        name: [],
-        searchAreaExpend: true,
-        resultAreaExpend: false,
-        verdictContentExpend: false,
-        newsContent: '',
-        verdictList: [],
-        dialogOpen: false,
-        verdict: '',
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            keyword: this.props.match.params.keyword,
+            showCatagory: false,
+            name: [],
+            searchAreaExpend: true,
+            resultAreaExpend: false,
+            verdictContentExpend: false,
+            newsContent: '',
+            verdictList: [],
+            dialogOpen: false,
+            verdict: '',
+        };
+        //console.log(this.props.match.params.keyword)
+    }
+
 
     handleChange = (e) => {
         this.setState({ search: e.target.value });
@@ -161,7 +166,7 @@ class SearchPage extends React.Component {
     }
 
     mongoTest = () => {
-        var keyword = this.state.search;
+        var keyword = this.state.keyword;
         axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
             { "opinion": keyword, "mainText": keyword, "reason": keyword }
         ).then(res => {
@@ -173,8 +178,8 @@ class SearchPage extends React.Component {
         })
     }
 
-    relativeSearchOnClick = () => {
-        var keyword = this.state.search;
+    relativeSearchOnClick = (keyword) => {
+        //var keyword = this.state.search;
         axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
             { "opinion": keyword, "mainText": keyword, "reason": keyword }
         ).then(res => {
@@ -239,6 +244,10 @@ class SearchPage extends React.Component {
     }
 
     render() {
+        if (this.props.match.params.keyword) {
+            this.relativeSearchOnClick(this.state.keyword);
+        };
+
         const { classes } = this.props;
 
         let pttLinkList = pttUrl.map((url, idx) =>
@@ -287,7 +296,7 @@ class SearchPage extends React.Component {
                                         <InputLabel htmlFor="search-customized-select" className={classes.bootstrapFormLabel}>
                                             輸入關鍵字</InputLabel>
                                         <BootstrapInput
-                                            value={this.state.search}
+                                            value={this.state.keyword}
                                             onChange={this.handleChange}
                                         />
                                     </FormControl>
@@ -298,7 +307,7 @@ class SearchPage extends React.Component {
                                 </form>
                                 <Button variant="contained" color='secondary' className={classes.margin} onClick={this.keywordSearchchOnClick}>
                                     搜尋關鍵字</Button>
-                                <Button variant="contained" color="primary" className={classes.margin} onClick={this.relativeSearchOnClick}>
+                                <Button variant="contained" color="primary" className={classes.margin} onClick={this.relativeSearchOnClick(this.state.keyword)}>
                                     搜尋相關結果</Button>
                                 <Button variant="contained" color="primary" className={classes.margin} onClick={this.mongoTest}>
                                     Mongo Test</Button>
