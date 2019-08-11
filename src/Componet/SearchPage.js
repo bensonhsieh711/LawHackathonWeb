@@ -195,7 +195,12 @@ class SearchPage extends React.Component {
             { "opinion": keyword, "mainText": keyword, "reason": keyword }
         ).then(res => {
             if (res.data) {
-                this.setState({ verdictList: res.data });
+                if (res.data.length > 0) {
+                    this.setState({ verdictList: res.data });
+                } else {
+                    this.setState({ verdictList: [] });
+                    alert("查無結果");
+                }
             } else {
                 this.setState({ verdictList: [] });
                 alert("查無結果");
@@ -212,22 +217,28 @@ class SearchPage extends React.Component {
     }
 
     relativeSearchOnClick = (keyword) => {
-        axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
-            { "opinion": keyword, "mainText": keyword, "reason": keyword }
-        ).then(res => {
-            if (res.data) {
+        if (keyword && keyword.length > 0) {
+            axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
+                { "opinion": keyword, "mainText": keyword, "reason": keyword }
+            ).then(res => {
+                if (res.data) {
+                    this.setState({ verdictList: res.data });
+                } else {
+                    this.setState({ verdictList: [] });
+                    alert("查無結果");
+                }
+            }).catch((err) => {
+                console.log(err);
+            }).finally(() => {
                 this.setState({
                     searchAreaExpend: false,
                     resultAreaExpend: true,
-                    verdictList: res.data
+                    Urlkeyword: null,
                 })
-            } else {
-                this.setState({ verdictList: [] });
-                alert("查無結果");
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
+            })
+        } else {
+            alert("請輸入相關詞彙或描述");
+        }
     }
 
     handleVerdictListClose = () => {
