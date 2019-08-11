@@ -8,7 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-//import Chip from '@material-ui/core/Chip';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -34,22 +34,12 @@ function MultipleSelect() {
 
   function handleChange(event) {
     setPersonName(event.target.value);
+    console.log(personName);
   }
-
-//   function handleChangeMultiple(event) {
-//     const { options } = event.target;
-//     const value = [];
-//     for (let i = 0, l = options.length; i < l; i += 1) {
-//       if (options[i].selected) {
-//         value.push(options[i].value);
-//       }
-//     }
-//     setPersonName(value);
-//   }
 
   return (
     <FormControl>
-      <InputLabel htmlFor="select-multiple-checkbox">請選擇</InputLabel>
+      <InputLabel htmlFor="select-multiple-checkbox">關鍵字</InputLabel>
       <Select
         multiple
         value={personName}
@@ -65,6 +55,7 @@ function MultipleSelect() {
           </MenuItem>
         ))}
       </Select>
+      <FormHelperText>請選擇相關字詞</FormHelperText>
     </FormControl>
   );
 }

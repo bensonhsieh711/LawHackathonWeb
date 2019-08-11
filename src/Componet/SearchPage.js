@@ -5,7 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import InputBase from '@material-ui/core/InputBase';
 import { Button } from '@material-ui/core';
-import MultipleSelect from './MultipleSelect'
+import Checkbox from '@material-ui/core/Checkbox';
 import Card from '@material-ui/core/Card';
 import Collapse from '@material-ui/core/Collapse';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,11 +13,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios'
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-//import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-//import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Logo from '../MosongLogo.png'
 import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -26,8 +24,11 @@ import CardActions from '@material-ui/core/CardActions';
 import classnames from 'classnames';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-//import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const BootstrapInput = withStyles(theme => ({
     root: {
@@ -107,18 +108,25 @@ const styles = theme => ({
     }
 });
 
-//const ITEM_HEIGHT = 48;
-//const ITEM_PADDING_TOP = 8;
-// const MenuProps = {
-//     PaperProps: {
-//         style: {
-//             maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//             width: 250,
-//         },
-//     },
-// };
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
 
-//const medias = ['PTT', 'TVBS', 'ETTODAY'];
+const category = [
+    '殺人',
+    '鄭傑',
+    '槍枝',
+    '幫派鬥爭',
+    '四海幫',
+];
+
 const pttUrl = [
     ['牛郎喝到酒精中毒亡 法院首次', 'https://www.ptt.cc/bbs/Gossiping/M.1559175089.A.5CF.html'],
     ['派遣工淚哭法院爭權益 控告', 'https://www.ptt.cc/bbs/Gossiping/M.1559552992.A.FAA.html'],
@@ -144,26 +152,29 @@ class SearchPage extends React.Component {
         this.state = {
             keyword: '',
             Urlkeyword: this.props.match.params.keyword ? this.props.match.params.keyword : null,
-            showCatagory: false,
-            name: [],
-            searchAreaExpend: true,
+            showKeywordList: false,
+            keywordList: [],
+            searchAreaExpend: false,
             resultAreaExpend: false,
             verdictContentExpend: false,
             newsContent: '',
             verdictList: [],
             dialogOpen: false,
             verdict: '',
+            identityDialogOpen: true,
+            indentity: 0, //預設一般民眾
+            showSearchVerdictBtn: false,
+            showSearchKeywordBtn: true,
         };
         //console.log(this.props)
     }
 
-
-    handleChange = (e) => {
+    handleInputChange = (e) => {
         this.setState({ keyword: e.target.value });
     }
 
     keywordSearchchOnClick = () => {
-        this.setState({ showCatagory: !this.state.showCatagory });
+        this.setState({ showKeywordList: true });
     }
 
     mongoTest = () => {
@@ -228,7 +239,7 @@ class SearchPage extends React.Component {
     }
 
     handleVerdictContentOpen = (verdict) => {
-        console.log(verdict);
+        //console.log(verdict);
         this.setState({
             verdict: verdict,
             searchAreaExpend: false,
@@ -245,12 +256,27 @@ class SearchPage extends React.Component {
         })
     }
 
+    handleIdentityDialogClose = () => {
+        this.setState({
+            identityDialogOpen: false,
+            searchAreaExpend: true,
+            showSearchKeywordBtn: this.state.indentity === 0 ? true : false,
+            showSearchVerdictBtn: this.state.indentity === 0 ? false : true,
+            showKeywordList: false,
+            keywordList: []
+        })
+    }
+
+    handleIdentityDialogOpen = () => {
+        this.setState({ identityDialogOpen: true })
+    }
+
     handleDialogClose = () => {
         this.setState({ dialogOpen: false })
     }
 
-    handleListItemClick(value) {
-        //onClose(value);
+    handleDialogOpen = () => {
+        this.setState({ dialogOpen: true })
     }
 
     handleExpandClick = () => {
@@ -260,17 +286,66 @@ class SearchPage extends React.Component {
         });
     };
 
-    handleDialogOpen = () => {
-        this.setState({ dialogOpen: true })
+    handleSelectChange = (event) => {
+        this.setState({ indentity: event.target.value });
+    }
+
+    convertToShortText = (text, length) => {
+        let result = '';
+        if (text && text.length > length) {
+            result = text.substr(0, length).concat('....');
+        } else {
+            result = text;
+        }
+        return result;
+    }
+
+    searchBySelectOnClick = () => {
+        if (this.state.keywordList && this.state.keywordList.length > 0) {
+            let keyword = this.state.keywordList[0];
+            axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
+                { "opinion": keyword, "mainText": keyword, "reason": keyword }
+            ).then(res => {
+                if (res.data) {
+                    if (res.data.length === 0) {
+                        this.setState({ verdictList: [] });
+                        alert("查無結果");
+                    } else {
+                        this.setState({
+                            searchAreaExpend: false,
+                            resultAreaExpend: true,
+                            verdictList: res.data
+                        })
+                    }
+                } else {
+                    this.setState({ verdictList: [] });
+                    alert("查無結果");
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            alert("請選擇一個以上相近關鍵字！")
+        }
+    }
+
+    handleMutiSelectChange = (event) => {
+        let array = [];
+        for (let i = 0; i < event.target.value.length; i++) {
+            if (array.indexOf(event.target.value[i]) === -1) {
+                array.push(event.target.value[i]);
+            }
+        }
+        this.setState({ keywordList: array });
     }
 
     render() {
         if (this.state.Urlkeyword !== null) {
             this.autoSearch(this.state.Urlkeyword);
         };
-
         const { classes } = this.props;
 
+        let indentityName = `目前身分：${this.state.indentity === 0 ? '一般民眾' : '律師'}`;
         let pttLinkList = pttUrl.map((url, idx) =>
             // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
             <ListItem component='a' key={idx} target="_blank" href={url[1]}>{url[0]}</ListItem >
@@ -288,6 +363,7 @@ class SearchPage extends React.Component {
 
         let VerdictContent = this.state.verdict ? <p>
             <b className={classes.topic}>種類</b>:{this.state.verdict.sys}<br />
+            <b className={classes.topic}>日期</b>:{new Date(this.state.verdict.date).toLocaleDateString()}<br />
             <b className={classes.topic}>文號:</b>{this.state.verdict.no}<br />
             <b className={classes.topic}>判決內容:</b>{this.state.verdict.judgement}<br /><br />
             <b className={classes.topic}>法律見解:</b>{this.state.verdict.opinion}<br /><br />
@@ -308,7 +384,8 @@ class SearchPage extends React.Component {
                             //     </IconButton>
                             // }
                             title="莫宋法律諮詢"
-                            subheader="請在下方輸入關鍵字"
+                            subheader={indentityName}
+                            onClick={this.handleIdentityDialogOpen}
                         />
                         <Collapse in={this.state.searchAreaExpend}>
                             <CardContent>
@@ -318,18 +395,42 @@ class SearchPage extends React.Component {
                                             輸入關鍵字</InputLabel>
                                         <BootstrapInput
                                             value={this.state.keyword}
-                                            onChange={this.handleChange}
+                                            onChange={this.handleInputChange}
                                         />
                                     </FormControl>
                                     <FormControl className={classes.margin}>
                                         <InputLabel htmlFor="search-customized-select" className={classes.bootstrapFormLabel} />
-                                        {this.state.showCatagory === true ? <MultipleSelect /> : null}
+                                        {this.state.showKeywordList === true ?
+                                            <FormControl className={classes.margin}>
+                                                <InputLabel htmlFor="select-multiple-checkbox" className={classes.bootstrapFormLabel}>關鍵字</InputLabel>
+                                                <Select
+                                                    multiple
+                                                    value={this.state.keywordList}
+                                                    onChange={this.handleMutiSelectChange}
+                                                    input={<Input id="select-multiple-checkbox" />}
+                                                    renderValue={selected => selected.join(', ')}
+                                                    MenuProps={MenuProps}
+                                                >
+                                                    {category.map(c => (
+                                                        <MenuItem key={c} value={c}>
+                                                            <Checkbox checked={this.state.keywordList.indexOf(c) > -1} />
+                                                            <ListItemText primary={c} />
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                                <FormHelperText>請選擇相關字詞</FormHelperText>
+                                            </FormControl> : null}
                                     </FormControl>
                                 </form>
-                                <Button variant="contained" color='secondary' className={classes.margin} onClick={this.keywordSearchchOnClick}>
-                                    搜尋關鍵字</Button>
-                                <Button variant="contained" color="primary" className={classes.margin} onClick={() => this.relativeSearchOnClick(this.state.keyword)}>
-                                    搜尋相關結果</Button>
+                                {this.state.showSearchKeywordBtn ?
+                                    <Button variant="contained" color='secondary' className={classes.margin} onClick={this.keywordSearchchOnClick}>
+                                        搜尋關鍵字</Button> : null}
+                                {this.state.showSearchVerdictBtn ?
+                                    <Button variant="contained" color="primary" className={classes.margin} onClick={() => this.relativeSearchOnClick(this.state.keyword)}>
+                                        搜尋相關判決書內容</Button> : null}
+                                {this.state.showKeywordList === true ?
+                                    <Button variant="contained" color="primary" className={classes.margin} onClick={() => this.searchBySelectOnClick()}>
+                                        搜尋相關判決書內容</Button> : null}
                                 <Button variant="contained" color="primary" className={classes.margin} onClick={this.mongoTest}>
                                     Mongo Test</Button>
                             </CardContent>
@@ -361,7 +462,8 @@ class SearchPage extends React.Component {
                                 {this.state.verdictList.map((verdict, index) => {
                                     return ([
                                         <ListItem key={index} button>
-                                            <ListItemText key={index} onClick={() => { this.handleVerdictContentOpen(verdict) }}>{verdict.no}：{verdict.mainText}</ListItemText>
+                                            <ListItemText key={index} onClick={() => { this.handleVerdictContentOpen(verdict) }}>
+                                                {new Date(verdict.date).toLocaleDateString()}：{verdict.no} {this.convertToShortText(verdict.mainText, 15)}</ListItemText>
                                         </ListItem>
                                     ]);
                                 })}
@@ -378,6 +480,26 @@ class SearchPage extends React.Component {
                                         <ListItem>ETTODAY <List>{ettodayLinkList}</List>
                                         </ListItem>
                                     </List>
+                                </DialogTitle>
+                            </Dialog>
+                            <Dialog onClose={this.handleIdentityDialogClose}
+                                aria-labelledby="customized-dialog-title"
+                                open={this.state.identityDialogOpen}>
+                                <DialogTitle id="customized-dialog-title">
+                                    <FormControl>
+                                        <InputLabel htmlFor="indentity-native-helper">身分</InputLabel>
+                                        <Select
+                                            value={this.state.indentity}
+                                            onChange={this.handleSelectChange}
+                                            input={<Input name="indentity" id="indentity-native-helper" />}
+                                        >
+                                            <MenuItem value={0}>一般民眾</MenuItem>
+                                            <MenuItem value={1}>律師</MenuItem>
+                                        </Select>
+                                        <FormHelperText>請選擇您的身分</FormHelperText>
+                                        <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleIdentityDialogClose}>
+                                            確認</Button>
+                                    </FormControl>
                                 </DialogTitle>
                             </Dialog>
                             <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictListClose}>
