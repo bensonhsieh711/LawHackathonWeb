@@ -274,6 +274,7 @@ class SearchPage extends React.Component {
             showSearchKeywordBtn: this.state.indentity === 0 ? true : false,
             showSearchVerdictBtn: this.state.indentity === 0 ? false : true,
             showKeywordList: false,
+            keyword: '',
             keywordList: []
         })
     }
@@ -442,8 +443,8 @@ class SearchPage extends React.Component {
                                 {this.state.showKeywordList === true ?
                                     <Button variant="contained" color="primary" className={classes.margin} onClick={() => this.searchBySelectOnClick()}>
                                         搜尋相關判決書內容</Button> : null}
-                                <Button variant="contained" color="primary" className={classes.margin} onClick={this.mongoTest}>
-                                    Mongo Test</Button>
+                                <Button variant="contained" color="secondary" className={classes.margin} onClick={this.handleIdentityDialogClose}>
+                                    重置查詢條件</Button>
                             </CardContent>
                         </Collapse>
                         <CardActions className={classes.actions} disableActionSpacing>
