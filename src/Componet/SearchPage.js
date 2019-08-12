@@ -271,11 +271,13 @@ class SearchPage extends React.Component {
         this.setState({
             identityDialogOpen: false,
             searchAreaExpend: true,
+            verdictContentExpend : false,
             showSearchKeywordBtn: this.state.indentity === 0 ? true : false,
             showSearchVerdictBtn: this.state.indentity === 0 ? false : true,
             showKeywordList: false,
             keyword: '',
-            keywordList: []
+            keywordList: [],
+            verdictList: []
         })
     }
 
@@ -435,7 +437,7 @@ class SearchPage extends React.Component {
                                     </FormControl>
                                 </form>
                                 {this.state.showSearchKeywordBtn ?
-                                    <Button variant="contained" color='secondary' className={classes.margin} onClick={this.keywordSearchchOnClick}>
+                                    <Button variant="contained" className={classes.margin} onClick={this.keywordSearchchOnClick}>
                                         搜尋關鍵字</Button> : null}
                                 {this.state.showSearchVerdictBtn ?
                                     <Button variant="contained" color="primary" className={classes.margin} onClick={() => this.relativeSearchOnClick(this.state.keyword)}>
