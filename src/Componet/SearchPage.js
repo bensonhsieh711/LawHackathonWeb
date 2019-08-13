@@ -161,8 +161,8 @@ class SearchPage extends React.Component {
             verdictList: [],
             dialogOpen: false,
             verdict: '',
-            identityDialogOpen: true,
-            indentity: 0, //預設一般民眾
+            identityDialogOpen: this.props.match.params.keyword? false:true,
+            indentity: this.props.match.params.keyword ? 0 : 1, //0:一般民眾, 1:律師
             showSearchVerdictBtn: false,
             showSearchKeywordBtn: true,
         };
