@@ -29,6 +29,7 @@ import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 
 const BootstrapInput = withStyles(theme => ({
     root: {
@@ -73,6 +74,11 @@ const styles = theme => ({
         paddingBottom: theme.spacing.unit * 2,
         //display: 'flex',
         //flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 250,
     },
     margin: {
         margin: theme.spacing.unit,
@@ -161,16 +167,17 @@ class SearchPage extends React.Component {
             verdictList: [],
             dialogOpen: false,
             verdict: '',
-            identityDialogOpen: this.props.match.params.keyword? false:true,
-            indentity: this.props.match.params.keyword ? 0 : 1, //0:一般民眾, 1:律師
+            identityDialogOpen: this.props.match.params.keyword ? false : true,
+            role: this.props.match.params.keyword ? 0 : 1, //0:一般民眾, 1:律師
             showSearchVerdictBtn: false,
             showSearchKeywordBtn: true,
+            userid: '',
         };
         //console.log(this.props)
     }
 
     handleInputChange = (e) => {
-        this.setState({ keyword: e.target.value });
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     keywordSearchchOnClick = () => {
@@ -213,6 +220,20 @@ class SearchPage extends React.Component {
                 resultAreaExpend: true,
                 Urlkeyword: null,
             })
+        })
+    }
+
+    recordUserInfo = () => {
+        axios.post(`http://35.234.24.135:3300/mongo/UpsertUserInfo`,
+            {
+                userid: this.state.userid,
+                from: "webSite",
+                status: this.state.role === 0 ? 'custom' : 'lawyer'
+            }
+        ).then(() => {
+            console.log('record user info success');
+        }).catch((err) => {
+            console.log(err);
         })
     }
 
@@ -268,12 +289,13 @@ class SearchPage extends React.Component {
     }
 
     handleIdentityDialogClose = () => {
+        this.recordUserInfo();
         this.setState({
             identityDialogOpen: false,
             searchAreaExpend: true,
-            verdictContentExpend : false,
-            showSearchKeywordBtn: this.state.indentity === 0 ? true : false,
-            showSearchVerdictBtn: this.state.indentity === 0 ? false : true,
+            verdictContentExpend: false,
+            showSearchKeywordBtn: this.state.role === 0 ? true : false,
+            showSearchVerdictBtn: this.state.role === 0 ? false : true,
             showKeywordList: false,
             keyword: '',
             keywordList: [],
@@ -301,7 +323,7 @@ class SearchPage extends React.Component {
     };
 
     handleSelectChange = (event) => {
-        this.setState({ indentity: event.target.value });
+        this.setState({ role: event.target.value });
     }
 
     convertToShortText = (text, length) => {
@@ -359,7 +381,7 @@ class SearchPage extends React.Component {
         };
         const { classes } = this.props;
 
-        let indentityName = `目前身分：${this.state.indentity === 0 ? '一般民眾' : '律師'}`;
+        let indentityName = `ID:${this.state.userid}    身分：${this.state.role === 0 ? '一般民眾' : '律師'}`;
         let pttLinkList = pttUrl.map((url, idx) =>
             // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
             <ListItem component='a' key={idx} target="_blank" href={url[1]}>{url[0]}</ListItem >
@@ -403,11 +425,11 @@ class SearchPage extends React.Component {
                         />
                         <Collapse in={this.state.searchAreaExpend}>
                             <CardContent>
-                                <form className={classes.root} autoComplete="off">
+                                <div className={classes.root}>
                                     <FormControl className={classes.margin}>
-                                        <InputLabel htmlFor="search-customized-select" className={classes.bootstrapFormLabel}>
+                                        <InputLabel htmlFor="search-keyword" className={classes.bootstrapFormLabel}>
                                             輸入關鍵字</InputLabel>
-                                        <BootstrapInput
+                                        <BootstrapInput name="keyword" id="search-keyword"
                                             value={this.state.keyword}
                                             onChange={this.handleInputChange}
                                         />
@@ -435,7 +457,7 @@ class SearchPage extends React.Component {
                                                 <FormHelperText>請選擇相關字詞</FormHelperText>
                                             </FormControl> : null}
                                     </FormControl>
-                                </form>
+                                </div>
                                 {this.state.showSearchKeywordBtn ?
                                     <Button variant="contained" className={classes.margin} onClick={this.keywordSearchchOnClick}>
                                         搜尋關鍵字</Button> : null}
@@ -496,24 +518,37 @@ class SearchPage extends React.Component {
                                     </List>
                                 </DialogTitle>
                             </Dialog>
-                            <Dialog onClose={this.handleIdentityDialogClose}
+                            <Dialog
                                 aria-labelledby="customized-dialog-title"
                                 open={this.state.identityDialogOpen}>
                                 <DialogTitle id="customized-dialog-title">
-                                    <FormControl>
-                                        <InputLabel htmlFor="indentity-native-helper">身分</InputLabel>
-                                        <Select
-                                            value={this.state.indentity}
-                                            onChange={this.handleSelectChange}
-                                            input={<Input name="indentity" id="indentity-native-helper" />}
-                                        >
-                                            <MenuItem value={0}>一般民眾</MenuItem>
-                                            <MenuItem value={1}>律師</MenuItem>
-                                        </Select>
-                                        <FormHelperText>請選擇您的身分</FormHelperText>
-                                        <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleIdentityDialogClose}>
-                                            確認</Button>
-                                    </FormControl>
+                                    <div>
+                                        <FormControl>
+                                            <TextField name="userid"
+                                                label="輸入您的ID(最多12個字元)"
+                                                style={{ width: 250 }}
+                                                value={this.state.userid}
+                                                onChange={this.handleInputChange}
+                                                margin="normal" inputProps={{ maxLength: 12 }}
+                                            />
+                                        </FormControl>
+                                    </div>
+                                    <div>
+                                        <FormControl>
+                                            {/* <InputLabel htmlFor="role-native-helper">身分</InputLabel> */}
+                                            <Select className={classes.margin}
+                                                value={this.state.role}
+                                                onChange={this.handleSelectChange}
+                                                input={<Input name="role" id="role-native-helper" />}
+                                            >
+                                                <MenuItem value={0}>一般民眾</MenuItem>
+                                                <MenuItem value={1}>律師</MenuItem>
+                                            </Select>
+                                            <FormHelperText>請選擇您的身分</FormHelperText>
+                                        </FormControl>
+                                    </div>
+                                    <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleIdentityDialogClose}>
+                                        確認</Button>
                                 </DialogTitle>
                             </Dialog>
                             <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictListClose}>
