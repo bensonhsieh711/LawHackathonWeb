@@ -381,7 +381,13 @@ class SearchPage extends React.Component {
         };
         const { classes } = this.props;
 
-        let indentityName = `ID:${this.state.userid}    身分：${this.state.role === 0 ? '一般民眾' : '律師'}`;
+        let indentityName = <div style={{fontFamily:"Microsoft JhengHei"}}>
+            <span>ID︰<b>{`${this.state.userid}`}</b></span><br/>
+            <span>身分︰<b>{`${this.state.role === 0 ? '一般民眾' : '律師'}`}</b></span>
+            </div>;
+
+        let title = <h2 style={{fontFamily:"Microsoft JhengHei"}}>莫宋法律諮詢</h2>;
+
         let pttLinkList = pttUrl.map((url, idx) =>
             // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
             <ListItem component='a' key={idx} target="_blank" href={url[1]}>{url[0]}</ListItem >
@@ -419,7 +425,7 @@ class SearchPage extends React.Component {
                             //         <MoreVertIcon />
                             //     </IconButton>
                             // }
-                            title="莫宋法律諮詢"
+                            title={title}
                             subheader={indentityName}
                             onClick={this.handleIdentityDialogOpen}
                         />
