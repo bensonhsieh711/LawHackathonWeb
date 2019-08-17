@@ -30,6 +30,7 @@ import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const BootstrapInput = withStyles(theme => ({
     root: {
@@ -110,7 +111,7 @@ const styles = theme => ({
         //width: 200,
     },
     topic: {
-        color: 'red',
+        //color: 'red',
     }
 });
 
@@ -171,7 +172,9 @@ class SearchPage extends React.Component {
             role: this.props.match.params.keyword ? 0 : 1, //0:一般民眾, 1:律師
             showSearchVerdictBtn: false,
             showSearchKeywordBtn: true,
-            userid: '',
+            userid: this.props.match.params.keyword ? '匿名搜尋' : '',
+            msg: '',
+            isOpenMsg: false,
         };
         //console.log(this.props)
     }
@@ -190,10 +193,16 @@ class SearchPage extends React.Component {
             { "opinion": keyword, "mainText": keyword, "reason": keyword }
         ).then(res => {
             console.log(res.data);
-            alert('Success!')
+            this.setState({
+                isOpenMsg: true,
+                msg: 'Success！',
+            })
         }).catch((err) => {
             console.log(err);
-            alert('Fail!')
+            this.setState({
+                isOpenMsg: true,
+                msg: 'Fail!',
+            })
         })
     }
 
@@ -203,17 +212,31 @@ class SearchPage extends React.Component {
         ).then(res => {
             if (res.data) {
                 if (res.data.length > 0) {
-                    this.setState({ verdictList: res.data });
+                    this.setState({
+                        verdictList: res.data,
+                        isOpenMsg: true,
+                        msg: '查詢成功',
+                    });
                 } else {
-                    this.setState({ verdictList: [] });
-                    alert("查無結果");
+                    this.setState({
+                        verdictList: [],
+                        isOpenMsg: true,
+                        msg: '查無資料',
+                    })
                 }
             } else {
-                this.setState({ verdictList: [] });
-                alert("查無結果");
+                this.setState({
+                    verdictList: [],
+                    isOpenMsg: true,
+                    msg: '查無資料',
+                })
             }
         }).catch((err) => {
             console.log(err);
+            this.setState({
+                isOpenMsg: true,
+                msg: '查無失敗',
+            })
         }).finally(() => {
             this.setState({
                 searchAreaExpend: false,
@@ -243,13 +266,24 @@ class SearchPage extends React.Component {
                 { "opinion": keyword, "mainText": keyword, "reason": keyword }
             ).then(res => {
                 if (res.data) {
-                    this.setState({ verdictList: res.data });
+                    this.setState({
+                        verdictList: res.data,
+                        isOpenMsg: true,
+                        msg: '查詢成功',
+                    });
                 } else {
-                    this.setState({ verdictList: [] });
-                    alert("查無結果");
+                    this.setState({
+                        verdictList: [],
+                        isOpenMsg: true,
+                        msg: '查無結果',
+                    })
                 }
             }).catch((err) => {
                 console.log(err);
+                this.setState({
+                    isOpenMsg: true,
+                    msg: '查無失敗',
+                })
             }).finally(() => {
                 this.setState({
                     searchAreaExpend: false,
@@ -258,7 +292,10 @@ class SearchPage extends React.Component {
                 })
             })
         } else {
-            alert("請輸入相關詞彙或描述");
+            this.setState({
+                isOpenMsg: true,
+                msg: '請輸入相關詞彙或描述',
+            })
         }
     }
 
@@ -289,18 +326,25 @@ class SearchPage extends React.Component {
     }
 
     handleIdentityDialogClose = () => {
-        this.recordUserInfo();
-        this.setState({
-            identityDialogOpen: false,
-            searchAreaExpend: true,
-            verdictContentExpend: false,
-            showSearchKeywordBtn: this.state.role === 0 ? true : false,
-            showSearchVerdictBtn: this.state.role === 0 ? false : true,
-            showKeywordList: false,
-            keyword: '',
-            keywordList: [],
-            verdictList: []
-        })
+        if (this.state.userid && this.state.userid.trim().length !== 0) {
+            this.recordUserInfo();
+            this.setState({
+                identityDialogOpen: false,
+                searchAreaExpend: true,
+                verdictContentExpend: false,
+                showSearchKeywordBtn: this.state.role === 0 ? true : false,
+                showSearchVerdictBtn: this.state.role === 0 ? false : true,
+                showKeywordList: false,
+                keyword: '',
+                keywordList: [],
+                verdictList: []
+            })
+        } else {
+            this.setState({
+                isOpenMsg: true,
+                msg: '請輸入使用者ID',
+            })
+        }
     }
 
     handleIdentityDialogOpen = () => {
@@ -344,24 +388,38 @@ class SearchPage extends React.Component {
             ).then(res => {
                 if (res.data) {
                     if (res.data.length === 0) {
-                        this.setState({ verdictList: [] });
-                        alert("查無結果");
+                        this.setState({
+                            verdictList: [],
+                            isOpenMsg: true,
+                            msg: '查無資料',
+                        })
                     } else {
                         this.setState({
+                            msg: '查詢成功',
                             searchAreaExpend: false,
                             resultAreaExpend: true,
                             verdictList: res.data
                         })
                     }
                 } else {
-                    this.setState({ verdictList: [] });
-                    alert("查無結果");
+                    this.setState({
+                        verdictList: [],
+                        isOpenMsg: true,
+                        msg: '查無資料',
+                    })
                 }
             }).catch((err) => {
                 console.log(err);
+                this.setState({
+                    isOpenMsg: true,
+                    msg: '查無失敗',
+                })
             })
         } else {
-            alert("請選擇一個以上相近關鍵字！")
+            this.setState({
+                isOpenMsg: true,
+                msg: '請選擇一個以上相近關鍵字！',
+            })
         }
     }
 
@@ -375,18 +433,31 @@ class SearchPage extends React.Component {
         this.setState({ keywordList: array });
     }
 
+    handleCloseMsg = () => {
+        this.setState({ isOpenMsg: false })
+    }
+
+    highlightKeywords = (text) => {
+        let parts = text.split(new RegExp(`(${this.state.keyword})`, 'gi'));
+        return <span> {parts.map((part, i) =>
+            <span key={i} style={part.toLowerCase() === this.state.keyword.toLowerCase() ? { color: "red", fontWeight: 'bold' } : {}}>
+                {part}
+            </span>)
+        } </span>;
+    }
+
     render() {
         if (this.state.Urlkeyword !== null) {
             this.autoSearch(this.state.Urlkeyword);
         };
         const { classes } = this.props;
 
-        let indentityName = <div style={{fontFamily:"Microsoft JhengHei"}}>
-            <span>ID︰<b>{`${this.state.userid}`}</b></span><br/>
-            <span>身分︰<b>{`${this.state.role === 0 ? '一般民眾' : '律師'}`}</b></span>
-            </div>;
+        let indentityName = <div style={{ fontFamily: "Microsoft JhengHei" }}>
+            <span>ID︰<strong>{`${this.state.userid}`}</strong></span><br />
+            <span>身分︰<strong>{`${this.state.role === 0 ? '一般民眾' : '律師'}`}</strong></span>
+        </div>;
 
-        let title = <h2 style={{fontFamily:"Microsoft JhengHei"}}>莫宋法律諮詢</h2>;
+        let title = <h2 style={{ fontFamily: "Microsoft JhengHei" }}>莫宋法律諮詢</h2>;
 
         let pttLinkList = pttUrl.map((url, idx) =>
             // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
@@ -404,12 +475,12 @@ class SearchPage extends React.Component {
         );
 
         let VerdictContent = this.state.verdict ? <p>
-            <b className={classes.topic}>種類</b>:{this.state.verdict.sys}<br />
+            <b className={classes.topic}>種類</b>:{this.highlightKeywords(this.state.verdict.sys)}<br />
             <b className={classes.topic}>日期</b>:{new Date(this.state.verdict.date).toLocaleDateString()}<br />
-            <b className={classes.topic}>文號:</b>{this.state.verdict.no}<br />
-            <b className={classes.topic}>判決內容:</b>{this.state.verdict.judgement}<br /><br />
-            <b className={classes.topic}>法律見解:</b>{this.state.verdict.opinion}<br /><br />
-            <b className={classes.topic}>主要內容:</b>{this.state.verdict.mainText}
+            <b className={classes.topic}>文號:</b>{this.highlightKeywords(this.state.verdict.no)}<br />
+            <b className={classes.topic}>主要內容:</b>{this.highlightKeywords(this.state.verdict.mainText)}
+            <b className={classes.topic}>判決內容:</b>{this.highlightKeywords(this.state.verdict.judgement)}<br /><br />
+            <b className={classes.topic}>法律見解:</b>{this.highlightKeywords(this.state.verdict.opinion)}<br /><br />
         </p> : null;
 
         return (
@@ -568,6 +639,15 @@ class SearchPage extends React.Component {
                                 返回內容</Button>
                         </Collapse>
                     </Card>
+                    <Snackbar
+                        open={this.state.isOpenMsg}
+                        onClose={this.handleCloseMsg}
+                        ContentProps={{
+                            'aria-describedby': 'message-id',
+                        }}
+                        duration={3000}
+                        message={<span id="message-id">{this.state.msg}</span>}
+                    />
                 </Paper>
             </div>
         );
