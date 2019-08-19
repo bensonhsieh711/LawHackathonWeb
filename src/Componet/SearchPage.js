@@ -126,13 +126,6 @@ const MenuProps = {
     },
 };
 
-const category = [
-    '殺人',
-    '鄭傑',
-    '槍枝',
-    '幫派鬥爭',
-    '四海幫',
-];
 
 const pttUrl = [
     ['牛郎喝到酒精中毒亡 法院首次', 'https://www.ptt.cc/bbs/Gossiping/M.1559175089.A.5CF.html'],
@@ -175,6 +168,7 @@ class SearchPage extends React.Component {
             userid: this.props.match.params.keyword ? '匿名搜尋' : '',
             msg: '',
             isOpenMsg: false,
+            category: [],
         };
         //console.log(this.props)
     }
@@ -184,7 +178,40 @@ class SearchPage extends React.Component {
     }
 
     keywordSearchchOnClick = () => {
-        this.setState({ showKeywordList: true });
+        axios.post('http://35.234.24.135:3300/wordcut/jieba', {
+            "paramword": this.state.keyword
+        }).then(res => {
+            if (res.data) {
+                if (res.data.result.length > 0) {
+                    this.setState({
+                        category: res.data.result,
+                        showKeywordList: true,
+                        isOpenMsg: true,
+                        msg: '查詢成功',
+                    });
+                } else {
+                    this.setState({
+                        category: [],
+                        showKeywordList: false,
+                        isOpenMsg: true,
+                        msg: '查無資料',
+                    })
+                }
+            } else {
+                this.setState({
+                    category: [],
+                    showKeywordList: false,
+                    isOpenMsg: true,
+                    msg: '查無資料',
+                })
+            }
+        }).catch((err) => {
+            console.log(err);
+            this.setState({
+                isOpenMsg: true,
+                msg: '查無失敗',
+            })
+        })
     }
 
     mongoTest = () => {
@@ -437,13 +464,27 @@ class SearchPage extends React.Component {
         this.setState({ isOpenMsg: false })
     }
 
-    highlightKeywords = (text) => {
-        let parts = text.split(new RegExp(`(${this.state.keyword})`, 'gi'));
-        return <span> {parts.map((part, i) =>
-            <span key={i} style={part.toLowerCase() === this.state.keyword.toLowerCase() ? { color: "red", fontWeight: 'bold' } : {}}>
-                {part}
-            </span>)
-        } </span>;
+    highlightKeywords = (str) => {
+        if (this.state.role === 0) {
+            if (new RegExp(this.state.keywordList.join("|")).test(str)) {
+                // At least one match
+                let parts = str.split(new RegExp(`(${this.state.keywordList.join("|")})`, 'gi'));
+                return <span> {parts.map((part, i) =>
+                    <span key={i} style={this.state.keywordList.includes(part) ? { color: "red", fontWeight: 'bold' } : {}}>
+                        {part}
+                    </span>)
+                } </span>;
+            }
+            return <span>{str}</span>;
+
+        } else {
+            let parts = str.split(new RegExp(`(${this.state.keyword})`, 'gi'));
+            return <span> {parts.map((part, i) =>
+                <span key={i} style={part.toLowerCase() === this.state.keyword.toLowerCase() ? { color: "red", fontWeight: 'bold' } : {}}>
+                    {part}
+                </span>)
+            } </span>;
+        }
     }
 
     render() {
@@ -475,12 +516,12 @@ class SearchPage extends React.Component {
         );
 
         let VerdictContent = this.state.verdict ? <p>
-            <b className={classes.topic}>種類</b>:{this.highlightKeywords(this.state.verdict.sys)}<br />
-            <b className={classes.topic}>日期</b>:{new Date(this.state.verdict.date).toLocaleDateString()}<br />
-            <b className={classes.topic}>文號:</b>{this.highlightKeywords(this.state.verdict.no)}<br />
-            <b className={classes.topic}>主要內容:</b>{this.highlightKeywords(this.state.verdict.mainText)}
-            <b className={classes.topic}>判決內容:</b>{this.highlightKeywords(this.state.verdict.judgement)}<br /><br />
-            <b className={classes.topic}>法律見解:</b>{this.highlightKeywords(this.state.verdict.opinion)}<br /><br />
+            <b className={classes.topic}>種類：</b>{this.highlightKeywords(this.state.verdict.sys)}<br />
+            <b className={classes.topic}>日期：</b>{new Date(this.state.verdict.date).toLocaleDateString()}<br />
+            <b className={classes.topic}>文號：</b>{this.highlightKeywords(this.state.verdict.no)}<br />
+            <b className={classes.topic}>主要內容：</b>{this.highlightKeywords(this.state.verdict.mainText)}<br /><br />
+            <b className={classes.topic}>判決內容：</b>{this.highlightKeywords(this.state.verdict.judgement)}<br /><br />
+            <b className={classes.topic}>法律見解：</b>{this.highlightKeywords(this.state.verdict.opinion)}<br /><br />
         </p> : null;
 
         return (
@@ -524,7 +565,7 @@ class SearchPage extends React.Component {
                                                     renderValue={selected => selected.join(', ')}
                                                     MenuProps={MenuProps}
                                                 >
-                                                    {category.map(c => (
+                                                    {this.state.category.map(c => (
                                                         <MenuItem key={c} value={c}>
                                                             <Checkbox checked={this.state.keywordList.indexOf(c) > -1} />
                                                             <ListItemText primary={c} />
@@ -567,10 +608,6 @@ class SearchPage extends React.Component {
                             </IconButton>
                         </CardActions>
                         <Collapse in={this.state.resultAreaExpend}>
-                            {/* <Button onClick={this.handleOpen}>案件一</Button>
-                    <Button onClick={this.handleOpen}>案件二</Button>
-                    <Button onClick={this.handleOpen}>案件三</Button>
-                    <Button onClick={this.handleOpen}>案件四</Button> */}
                             <List>
                                 {this.state.verdictList.map((verdict, index) => {
                                     return ([
