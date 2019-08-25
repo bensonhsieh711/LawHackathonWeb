@@ -126,7 +126,9 @@ const MenuProps = {
     },
 };
 
-
+const keywordTestList = [
+    '家暴', '離婚', '民法訴訟'
+];
 const pttUrl = [
     ['牛郎喝到酒精中毒亡 法院首次', 'https://www.ptt.cc/bbs/Gossiping/M.1559175089.A.5CF.html'],
     ['派遣工淚哭法院爭權益 控告', 'https://www.ptt.cc/bbs/Gossiping/M.1559552992.A.FAA.html'],
@@ -162,7 +164,7 @@ class SearchPage extends React.Component {
             dialogOpen: false,
             verdict: '',
             identityDialogOpen: this.props.match.params.keyword ? false : true,
-            role: this.props.match.params.keyword ? 0 : 1, //0:一般民眾, 1:律師
+            role: this.props.match.params.keyword ? 1 : 0, //0:一般民眾, 1:律師
             showSearchVerdictBtn: false,
             showSearchKeywordBtn: true,
             userid: this.props.match.params.keyword ? '匿名搜尋' : '',
@@ -266,6 +268,7 @@ class SearchPage extends React.Component {
             })
         }).finally(() => {
             this.setState({
+                keyword: keyword,
                 searchAreaExpend: false,
                 resultAreaExpend: true,
                 Urlkeyword: null,
@@ -480,7 +483,7 @@ class SearchPage extends React.Component {
         } else {
             let parts = str.split(new RegExp(`(${this.state.keyword})`, 'gi'));
             return <span> {parts.map((part, i) =>
-                <span key={i} style={part.toLowerCase() === this.state.keyword.toLowerCase() ? { color: "red", fontWeight: 'bold' } : {}}>
+                <span key={i} style={part === this.state.keyword ? { color: "red", fontWeight: 'bold' } : {}}>
                     {part}
                 </span>)
             } </span>;
@@ -498,7 +501,7 @@ class SearchPage extends React.Component {
             <span>身分︰<strong>{`${this.state.role === 0 ? '一般民眾' : '律師'}`}</strong></span>
         </div>;
 
-        let title = <h2 style={{ fontFamily: "Microsoft JhengHei" }}>莫宋法律諮詢</h2>;
+        let title = <h2 style={{ fontFamily: "Microsoft JhengHei" }}>莫頌法律諮詢</h2>;
 
         let pttLinkList = pttUrl.map((url, idx) =>
             // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
