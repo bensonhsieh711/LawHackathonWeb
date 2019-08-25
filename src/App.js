@@ -15,9 +15,8 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
-        <Route path="/:keyword" render={(props) => <SearchPage {...props} />} />
         <Route path="/" exact component={SearchPage} />
-        {/* <Route path="/search/:keyword" render={(props) => <SearchPage {...props} />} /> */}
+        <Route path="/search/:keyword" render={(props) => <SearchPage {...props} />} />
       </MuiThemeProvider>
     )
   }
