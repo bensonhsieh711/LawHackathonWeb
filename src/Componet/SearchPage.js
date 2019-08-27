@@ -148,6 +148,117 @@ const tvbsUrl = [
     ['揭女童疑天天遭哥性侵', 'https://news.tvbs.com.tw/tech/1130420'],
 ];
 
+const testVerdict = [
+    {
+        "court": "最高法院",
+        "date": "2018-12-12T00:00:00+08:00",
+        "no": "107,台上,2493",
+        "sys": "民事",
+        "reason": "請求離婚",
+        "judgement": "最高法院民事裁定\r\n一○六年度台上字第一八○○號上　訴　人　蕭○○訴訟代理人　朱清雄律師被 上訴 人　柯○○訴訟代理人　潘欣欣律師上列當事人間請求離婚等事件，上訴人對於中華民國一○六年四月十一日台灣高等法院台中分院第二審判決（一○六年度家上字第六號），提起上訴。",
+        "mainText": "主文上訴駁回。第三審訴訟費用由上訴人負擔。",
+        "opinion": "理由按上訴第三審法院，非以原判決違背法令為理由，不得為之。又提起上訴，上訴狀內應記載上訴理由，表明原判決所違背之法令及其具體內容，暨依訴訟資料合於該違背法令之具體事實，其依民事訴訟法第四百六十九條之一規定提起上訴者，並應具體敘述為從事法之續造、確保裁判之一致性或其他所涉及之法律見解具有原則上重要性之理由。同法第四百六十七條、第四百七十條第二項定有明文。而依同法第四百六十八條規定，判決不適用法規或適用不當者，為違背法令；依同法第四百六十九條規定，判決有該條所列各款情形之一者，為當然違背法令。是當事人提起上訴，如以同法第四百六十九條所列各款情形為理由時，其上訴狀或理由書應表明該判決有合於各該條款規定情形之具體內容，及係依何訴訟資料合於該違背法令之具體事實。如依同法第四百六十八條規定，以原判決有不適用法規或適用法規不當為理由時，其上訴狀或理由書應表明該判決所違背之法令條項，或有關判例、解釋字號，或成文法以外之習慣或法理等及其具體內容，暨係依何訴訟資料合於該違背法令之具體事實，並具體敘述為從事法之續造、確保裁判之一致性或其他所涉及之法律見解具有原則上重要性之理由。上訴狀或理由書如未依上述方法表明，或其所表明者與上開法條規定不合時，即難認為已合法表明上訴理由，其上訴自非合法。上開規定，依家事事件法第五十一條規定，於家事訴訟事件準用之。本件上訴人對於原判決提起上訴，雖以該判決違背法令為由，惟核其上訴理由狀所載內容，係就原審取捨證據、認定事實之職權行使所論斷：兩造婚姻關係存續中，上訴人長期酗酒成癮，多次酒後辱罵、恐嚇、施暴被上訴人，雖其目前參與酒癮戒治教育期間穩定出席，對家暴之認知有所提升，惟對於其實施家暴行為損害兩造之婚姻關係，仍無法積極面對溝通處理，兩造婚姻已生破綻而無回復之望，有難以維持之重大事由，被上訴人請求離婚，為有理由等情，指摘其為不當，並就原審所為論斷，泛言未論斷或論斷矛盾、違法，而非表明該判決所違背之法令及其具體內容，暨依訴訟資料合於該違背法令之具體事實，並具體敘述為從事法之續造、確保裁判之一致性或其他所涉及之法律見解具有原則上重要性之理由，難認其已合法表明上訴理由。依首揭說明，應認其上訴為不合法。末查原審斟酌上訴人婚後長期酗酒成癮，多次酒後辱罵、恐嚇、施暴被上訴人，雖其目前參與酒癮戒治教育期間穩定出席，對家暴之認知有所提升，惟對於其實施家暴行為損害兩造之婚姻關係，仍無法積極面對溝通處理等情，認兩造婚姻已生破綻而無回復之望，有難以維持之重大事由，爰為上訴人敗訴之判決，經核並無違背法令情形，附此敘明。據上論結，本件上訴為不合法。依家事事件法第五十一條，民事訴訟法第四百八十一條、第四百四十四條第一項、第九十五條、第七十八條，裁定如主文。",
+        "relatedIssues": [
+            {
+                "lawName": "家事事件法",
+                "issueRef": "51"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "78"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "95"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "444"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "467"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "468"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "469"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "469 1"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "470"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "481"
+            }
+        ],
+    },
+    {
+        "court": "最高法院",
+        "date": "2017-06-22T00:00:00+08:00",
+        "no": "106,台上,1800",
+        "sys": "民事",
+        "reason": "請求離婚等",
+        "judgement": "最高法院民事裁定\r\n107年度台上字第2493號上　訴　人　劉性卿訴訟代理人　林宜慶律師被　上訴人　陳秀卿上列當事人間請求離婚事件，上訴人對於中華民國107年9月5 日臺灣高等法院臺中分院第二審判決（107年度家上字第6號），提起上訴。",
+        "mainText": "主文上訴駁回。第三審訴訟費用由上訴人負擔。",
+        "opinion": "理由按上訴第三審法院，非以原判決違背法令為理由，不得為之。又提起上訴，上訴狀內應記載上訴理由，其以民事訴訟法第469條所定事由提起第三審上訴者，應於上訴狀內表明：原判決所違背之法令及其具體內容、暨依訴訟資料合於該違背法令之具體事實。其依同法第469條之1規定提起上訴者，並應具體敘述為從事法之續造、確保裁判之一致性或其他所涉及之法律見解具有原則上重要性之理由。同法第467條、第470條第2項分別定有明文。而依同法第468條規定，判決不適用法規或適用不當者，為違背法令；依同法第469條規定，判決有該條所列各款情形之一者，為當然違背法令。是當事人提起第三審上訴，如合併以同法第469條及第469條之1之事由為上訴理由時，其上訴狀或理由書應表明該判決所違背之法令條項，或有關判例、解釋字號，或成文法以外之習慣或法理等及其具體內容，暨係依何訴訟資料合於該違背法令之具體事實，並具體敘述為從事法之續造、確保裁判之一致性或其他所涉及之法律見解具有原則上重要性之理由。如未依上述方法表明，或其所表明者與上開法條規定不合時，即難認為已合法表明上訴理由，其上訴自非合法。上開規定，於家事訴訟事件，依家事事件法第51條規定，亦應準用之。本件上訴人對於原判決提起第三審上訴，雖以該判決違背法令為由，惟核其上訴理由狀所載內容，係就原審取捨證據、認定事實之職權行使所論斷：兩造於民國73年8月30日結婚，被上訴人係因上訴人之舉止造成其長期心理不安，及聽聞上訴人可能有外遇，始於雙方爭執時，質疑上訴人有外遇，客觀上難謂已使上訴人受其不堪同居之虐待；被上訴人雖因心感委曲而於105年8月3日離家，然上訴人不僅於被上訴人（同年10月13日）返家時對其施以家庭暴力，且囑第三人向被上訴人取回住家鑰匙，並設立被上訴人返家同居之障礙，難認被上訴人惡意遺棄上訴人在繼續狀態中；兩造之婚姻破綻，上訴人應負較重之責任。上訴人依民法第1052條第1項第3款、第5款及第2項規定，請求判決兩造離婚，為無理由等情，指摘為不當，並就原審命為辯論及已論斷或其他贅述與判決結果無影響者，泛言為未論斷或論斷違法，而非表明該判決所違背之法令及其具體內容，暨依訴訟資料合於該違背法令之具體事實，更未具體敘述為從事法之續造、確保裁判之一致性或其他所涉及之法律見解具有原則上重要性之理由，難認其已合法表明上訴理由。依首揭說明，應認其上訴為不合法。據上論結，本件上訴為不合法。依家事事件法第51條，民事訴訟法第481條、第444條第1項、第95條、第78條，裁定如主文。",
+        "relatedIssues": [
+            {
+                "lawName": "家事事件法",
+                "issueRef": "51"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "78"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "95"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "444"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "467"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "468"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "469"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "469 1"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "470"
+            },
+            {
+                "lawName": "民事訴訟法",
+                "issueRef": "481"
+            },
+            {
+                "lawName": "民法",
+                "issueRef": "1052"
+            }
+        ],
+    },
+];
+
 class SearchPage extends React.Component {
     constructor(props) {
         super(props);
@@ -171,6 +282,7 @@ class SearchPage extends React.Component {
             msg: '',
             isOpenMsg: false,
             category: [],
+            demoMode: false,
         };
         //console.log(this.props)
     }
@@ -180,17 +292,34 @@ class SearchPage extends React.Component {
     }
 
     keywordSearchchOnClick = () => {
-        axios.post('http://35.234.24.135:3300/wordcut/jieba', {
-            "paramword": this.state.keyword
-        }).then(res => {
-            if (res.data) {
-                if (res.data.result.length > 0) {
-                    this.setState({
-                        category: res.data.result,
-                        showKeywordList: true,
-                        isOpenMsg: true,
-                        msg: '查詢成功',
-                    });
+        if (this.state.keyword === "離婚案例") {
+            this.setState({
+                demoMode: true,
+                category: keywordTestList,
+                showKeywordList: true,
+                isOpenMsg: true,
+                msg: '查詢成功',
+            });
+        } else {
+            axios.post('http://35.234.24.135:3300/wordcut/jieba', {
+                "paramword": this.state.keyword
+            }).then(res => {
+                if (res.data) {
+                    if (res.data.result.length > 0) {
+                        this.setState({
+                            category: res.data.result,
+                            showKeywordList: true,
+                            isOpenMsg: true,
+                            msg: '查詢成功',
+                        });
+                    } else {
+                        this.setState({
+                            category: [],
+                            showKeywordList: false,
+                            isOpenMsg: true,
+                            msg: '查無資料',
+                        })
+                    }
                 } else {
                     this.setState({
                         category: [],
@@ -199,40 +328,14 @@ class SearchPage extends React.Component {
                         msg: '查無資料',
                     })
                 }
-            } else {
+            }).catch((err) => {
+                console.log(err);
                 this.setState({
-                    category: [],
-                    showKeywordList: false,
                     isOpenMsg: true,
-                    msg: '查無資料',
+                    msg: '查無失敗',
                 })
-            }
-        }).catch((err) => {
-            console.log(err);
-            this.setState({
-                isOpenMsg: true,
-                msg: '查無失敗',
             })
-        })
-    }
-
-    mongoTest = () => {
-        var keyword = this.state.keyword;
-        axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
-            { "opinion": keyword, "mainText": keyword, "reason": keyword }
-        ).then(res => {
-            console.log(res.data);
-            this.setState({
-                isOpenMsg: true,
-                msg: 'Success！',
-            })
-        }).catch((err) => {
-            console.log(err);
-            this.setState({
-                isOpenMsg: true,
-                msg: 'Fail!',
-            })
-        })
+        }
     }
 
     autoSearch = (keyword) => {
@@ -291,41 +394,45 @@ class SearchPage extends React.Component {
     }
 
     relativeSearchOnClick = (keyword) => {
-        if (keyword && keyword.length > 0) {
-            axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
-                { "opinion": keyword, "mainText": keyword, "reason": keyword }
-            ).then(res => {
-                if (res.data) {
+        if (this.state.demoMode) {
+            this.setState({ verdictList: testVerdict });
+        } else {
+            if (keyword && keyword.length > 0) {
+                axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
+                    { "opinion": keyword, "mainText": keyword, "reason": keyword }
+                ).then(res => {
+                    if (res.data) {
+                        this.setState({
+                            verdictList: res.data,
+                            isOpenMsg: true,
+                            msg: '查詢成功',
+                        });
+                    } else {
+                        this.setState({
+                            verdictList: [],
+                            isOpenMsg: true,
+                            msg: '查無結果',
+                        })
+                    }
+                }).catch((err) => {
+                    console.log(err);
                     this.setState({
-                        verdictList: res.data,
                         isOpenMsg: true,
-                        msg: '查詢成功',
-                    });
-                } else {
-                    this.setState({
-                        verdictList: [],
-                        isOpenMsg: true,
-                        msg: '查無結果',
+                        msg: '查無失敗',
                     })
-                }
-            }).catch((err) => {
-                console.log(err);
+                }).finally(() => {
+                    this.setState({
+                        searchAreaExpend: false,
+                        resultAreaExpend: true,
+                        Urlkeyword: null,
+                    })
+                })
+            } else {
                 this.setState({
                     isOpenMsg: true,
-                    msg: '查無失敗',
+                    msg: '請輸入相關詞彙或描述',
                 })
-            }).finally(() => {
-                this.setState({
-                    searchAreaExpend: false,
-                    resultAreaExpend: true,
-                    Urlkeyword: null,
-                })
-            })
-        } else {
-            this.setState({
-                isOpenMsg: true,
-                msg: '請輸入相關詞彙或描述',
-            })
+            }
         }
     }
 
@@ -411,45 +518,53 @@ class SearchPage extends React.Component {
     }
 
     searchBySelectOnClick = () => {
-        if (this.state.keywordList && this.state.keywordList.length > 0) {
-            let keyword = this.state.keywordList[0];
-            axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
-                { "opinion": keyword, "mainText": keyword, "reason": keyword }
-            ).then(res => {
-                if (res.data) {
-                    if (res.data.length === 0) {
+        if (this.state.demoMode) {
+            this.setState({
+                verdictList: testVerdict,
+                searchAreaExpend: false,
+                resultAreaExpend: true,
+            });
+        } else {
+            if (this.state.keywordList && this.state.keywordList.length > 0) {
+                let keyword = this.state.keywordList[0];
+                axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
+                    { "opinion": keyword, "mainText": keyword, "reason": keyword }
+                ).then(res => {
+                    if (res.data) {
+                        if (res.data.length === 0) {
+                            this.setState({
+                                verdictList: [],
+                                isOpenMsg: true,
+                                msg: '查無資料',
+                            })
+                        } else {
+                            this.setState({
+                                msg: '查詢成功',
+                                searchAreaExpend: false,
+                                resultAreaExpend: true,
+                                verdictList: res.data
+                            })
+                        }
+                    } else {
                         this.setState({
                             verdictList: [],
                             isOpenMsg: true,
                             msg: '查無資料',
                         })
-                    } else {
-                        this.setState({
-                            msg: '查詢成功',
-                            searchAreaExpend: false,
-                            resultAreaExpend: true,
-                            verdictList: res.data
-                        })
                     }
-                } else {
+                }).catch((err) => {
+                    console.log(err);
                     this.setState({
-                        verdictList: [],
                         isOpenMsg: true,
-                        msg: '查無資料',
+                        msg: '查無失敗',
                     })
-                }
-            }).catch((err) => {
-                console.log(err);
+                })
+            } else {
                 this.setState({
                     isOpenMsg: true,
-                    msg: '查無失敗',
+                    msg: '請選擇一個以上相近關鍵字！',
                 })
-            })
-        } else {
-            this.setState({
-                isOpenMsg: true,
-                msg: '請選擇一個以上相近關鍵字！',
-            })
+            }
         }
     }
 
@@ -525,6 +640,9 @@ class SearchPage extends React.Component {
             <b className={classes.topic}>主要內容：</b>{this.highlightKeywords(this.state.verdict.mainText)}<br /><br />
             <b className={classes.topic}>判決內容：</b>{this.highlightKeywords(this.state.verdict.judgement)}<br /><br />
             <b className={classes.topic}>法律見解：</b>{this.highlightKeywords(this.state.verdict.opinion)}<br /><br />
+            <b className={classes.topic}>相關法條：</b>{this.state.verdict.relatedIssues.map((issue, idx) => {
+                return <span key={idx}>{idx + 1}.{this.highlightKeywords(issue.lawName)}第{this.highlightKeywords(issue.issueRef.replace(" ", "之"))}條<br /></span>;
+            })}
         </p> : null;
 
         return (
@@ -626,11 +744,19 @@ class SearchPage extends React.Component {
                                 open={this.state.dialogOpen}>
                                 <DialogTitle id="customized-dialog-title" onClose={this.handleDialogClose}>
                                     <List>
-                                        <ListItem>PTT<List>{pttLinkList}</List>
+                                        {/* <ListItem>PTT
+                                            <List>{pttLinkList}</List>
                                         </ListItem>
-                                        <ListItem>TVBS<List>{tvbsLinkList}</List>
+                                        <ListItem>TVBS
+                                            <List>{tvbsLinkList}</List>
                                         </ListItem>
-                                        <ListItem>ETTODAY <List>{ettodayLinkList}</List>
+                                        <ListItem>ETTODAY
+                                            <List>{ettodayLinkList}</List>
+                                        </ListItem> */}
+                                        <ListItem>Yahoo
+                                            <List>
+                                                <ListItem component='a' key={0} target="_blank" href="https://shorturl.at/izELT">【風向新聞全民開講】先生外遇要離婚？律師告訴妳如何自保</ListItem >
+                                            </List>
                                         </ListItem>
                                     </List>
                                 </DialogTitle>
@@ -644,6 +770,7 @@ class SearchPage extends React.Component {
                                             <TextField name="userid"
                                                 label="輸入您的ID(最多12個字元)"
                                                 style={{ width: 250 }}
+                                                autoFocus={true}
                                                 value={this.state.userid}
                                                 onChange={this.handleInputChange}
                                                 margin="normal" inputProps={{ maxLength: 12 }}
