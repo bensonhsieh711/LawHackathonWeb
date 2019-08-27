@@ -339,16 +339,31 @@ class SearchPage extends React.Component {
     }
 
     autoSearch = (keyword) => {
-        axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
-            { "opinion": keyword, "mainText": keyword, "reason": keyword }
-        ).then(res => {
-            if (res.data) {
-                if (res.data.length > 0) {
-                    this.setState({
-                        verdictList: res.data,
-                        isOpenMsg: true,
-                        msg: '查詢成功',
-                    });
+        if (keyword === "離婚A" || keyword === "離婚B") {
+            this.setState({
+                verdictList: keyword === "離婚A" ? [testVerdict[0]] : [testVerdict[1]],
+                searchAreaExpend: false,
+                resultAreaExpend: true,
+                Urlkeyword: null,
+            });
+        } else {
+            axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
+                { "opinion": keyword, "mainText": keyword, "reason": keyword }
+            ).then(res => {
+                if (res.data) {
+                    if (res.data.length > 0) {
+                        this.setState({
+                            verdictList: res.data,
+                            isOpenMsg: true,
+                            msg: '查詢成功',
+                        });
+                    } else {
+                        this.setState({
+                            verdictList: [],
+                            isOpenMsg: true,
+                            msg: '查無資料',
+                        })
+                    }
                 } else {
                     this.setState({
                         verdictList: [],
@@ -356,27 +371,21 @@ class SearchPage extends React.Component {
                         msg: '查無資料',
                     })
                 }
-            } else {
+            }).catch((err) => {
+                console.log(err);
                 this.setState({
-                    verdictList: [],
                     isOpenMsg: true,
-                    msg: '查無資料',
+                    msg: '查無失敗',
                 })
-            }
-        }).catch((err) => {
-            console.log(err);
-            this.setState({
-                isOpenMsg: true,
-                msg: '查無失敗',
+            }).finally(() => {
+                this.setState({
+                    keyword: keyword,
+                    searchAreaExpend: false,
+                    resultAreaExpend: true,
+                    Urlkeyword: null,
+                })
             })
-        }).finally(() => {
-            this.setState({
-                keyword: keyword,
-                searchAreaExpend: false,
-                resultAreaExpend: true,
-                Urlkeyword: null,
-            })
-        })
+        }
     }
 
     recordUserInfo = () => {
