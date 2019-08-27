@@ -287,6 +287,11 @@ class SearchPage extends React.Component {
         //console.log(this.props)
     }
 
+    componentWillMount = () => {
+        if (this.state.Urlkeyword !== null) {
+            this.autoSearch(this.state.Urlkeyword);
+        };
+    }
     handleInputChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -342,10 +347,15 @@ class SearchPage extends React.Component {
         if (keyword === "離婚A" || keyword === "離婚B") {
             this.setState({
                 verdictList: keyword === "離婚A" ? [testVerdict[0]] : [testVerdict[1]],
-                searchAreaExpend: false,
-                resultAreaExpend: true,
+                verdict: keyword === "離婚A" ? testVerdict[0] : testVerdict[1],
+                //searchAreaExpend: false,
+                //resultAreaExpend: false,
+                verdictContentExpend: true,
+                //keyword: keyword,
                 Urlkeyword: null,
-            });
+                isOpenMsg: true,
+                msg: '查詢成功',
+            })
         } else {
             axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
                 { "opinion": keyword, "mainText": keyword, "reason": keyword }
@@ -620,9 +630,6 @@ class SearchPage extends React.Component {
     }
 
     render() {
-        if (this.state.Urlkeyword !== null) {
-            this.autoSearch(this.state.Urlkeyword);
-        };
         const { classes } = this.props;
 
         let indentityName = <div style={{ fontFamily: "Microsoft JhengHei" }}>
