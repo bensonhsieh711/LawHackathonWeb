@@ -394,8 +394,13 @@ class SearchPage extends React.Component {
     }
 
     relativeSearchOnClick = (keyword) => {
-        if (this.state.demoMode) {
-            this.setState({ verdictList: testVerdict });
+        if (keyword === "離婚案例") {
+            this.setState({
+                verdictList: testVerdict,
+                searchAreaExpend: false,
+                resultAreaExpend: true,
+                Urlkeyword: null,
+            });
         } else {
             if (keyword && keyword.length > 0) {
                 axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
