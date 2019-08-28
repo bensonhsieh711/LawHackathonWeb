@@ -637,7 +637,7 @@ class SearchPage extends React.Component {
             <span>身分︰<strong>{`${this.state.role === 0 ? '一般民眾' : '律師'}`}</strong></span>
         </div>;
 
-        let title = <h2 style={{ fontFamily: "Microsoft JhengHei" }}>莫頌法律諮詢</h2>;
+        let title = <h2 style={{ fontFamily: "Microsoft JhengHei" }}>莫訟法律諮詢</h2>;
 
         let pttLinkList = pttUrl.map((url, idx) =>
             // <li key={idx}><a target="_blank" href={url[1]}>{url[0]}</a></li>
