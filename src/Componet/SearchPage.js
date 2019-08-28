@@ -419,6 +419,8 @@ class SearchPage extends React.Component {
                 searchAreaExpend: false,
                 resultAreaExpend: true,
                 Urlkeyword: null,
+                isOpenMsg: true,
+                msg: '查詢成功',
             });
         } else {
             if (keyword && keyword.length > 0) {
@@ -547,6 +549,8 @@ class SearchPage extends React.Component {
                 verdictList: testVerdict,
                 searchAreaExpend: false,
                 resultAreaExpend: true,
+                isOpenMsg: true,
+                msg: '查詢成功',
             });
         } else {
             if (this.state.keywordList && this.state.keywordList.length > 0) {
