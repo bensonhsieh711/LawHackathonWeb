@@ -273,13 +273,17 @@ class SearchPage extends React.Component {
             newsContent: '',
             verdictList: [],
             dialogOpen: false,
+            isAutoSearch: this.props.match.params.keyword ? true : false,
             verdict: '',
-            identityDialogOpen: this.props.match.params.keyword ? false : true,
-            role: this.props.match.params.keyword ? 1 : 0, //0:一般民眾, 1:律師
+            //identityDialogOpen: this.props.match.params.keyword ? false : true,
+            identityDialogOpen: true,
+            //role: this.props.match.params.keyword ? 1 : 0, //0:一般民眾, 1:律師
+            role: 0, //0:一般民眾, 1:律師
             showSearchVerdictBtn: false,
             showSearchKeywordBtn: true,
-            userid: this.props.match.params.keyword ? '匿名搜尋' : '',
-            msg: '',
+            //userid: this.props.match.params.keyword ? '匿名搜尋' : '',
+            userid: "",
+            msg: "",
             isOpenMsg: false,
             category: [],
             demoMode: false,
@@ -308,9 +312,10 @@ class SearchPage extends React.Component {
         } else {
             axios.get(`http://35.234.24.135:3300/word2vec?keyword=${this.state.keyword}`)
                 .then(res => {
-                    if (res.data) {
+                    if (res.data && res.data.result !== "w2v error") {
                         if (res.data.result.length > 0) {
                             this.setState({
+                                keywordList: [],
                                 category: res.data.result,
                                 showKeywordList: true,
                                 isOpenMsg: true,
@@ -318,6 +323,7 @@ class SearchPage extends React.Component {
                             });
                         } else {
                             this.setState({
+                                keywordList: [],
                                 category: [],
                                 showKeywordList: false,
                                 isOpenMsg: true,
@@ -326,6 +332,7 @@ class SearchPage extends React.Component {
                         }
                     } else {
                         this.setState({
+                            keywordList: [],
                             category: [],
                             showKeywordList: false,
                             isOpenMsg: true,
@@ -335,6 +342,7 @@ class SearchPage extends React.Component {
                 }).catch((err) => {
                     console.log(err);
                     this.setState({
+                        keywordList: [],
                         isOpenMsg: true,
                         msg: '查無資料',
                     })
@@ -343,17 +351,21 @@ class SearchPage extends React.Component {
     }
 
     autoSearch = (search) => {
+        let keywordArray = search.split("_");
         if (search === "恐嚇_施暴" || search === "離婚_外遇" || search === "老公_外遇_吵架_酗酒_家暴_虐待_離婚") {
             this.setState({
                 verdictList: search === "恐嚇_施暴" ? [testVerdict[0]] : [testVerdict[1]],
                 verdict: search === "恐嚇_施暴" ? testVerdict[0] : testVerdict[1],
+                keywordList: keywordArray,
                 verdictContentExpend: true,
                 Urlkeyword: null,
+                isAutoSearch: true,
+                identityDialogOpen: false,
                 isOpenMsg: true,
+                demoMode: true,
                 msg: '查詢成功',
             })
         } else {
-            let keywordArray = search.split("_");
             axios.post('http://35.234.24.135:3200/casigo/account/fizzytfidfread',
                 { "tfidf": keywordArray }
             ).then(res => {
@@ -362,12 +374,26 @@ class SearchPage extends React.Component {
                         this.setState({
                             verdictList: res.data,
                             verdict: res.data[0],
+                            keywordList: keywordArray,
+                            keyword: search,
+                            isAutoSearch: true,
+                            verdictContentExpend: true,
+                            identityDialogOpen: false,
+                            Urlkeyword: null,
+                            demoMode: false,
                             isOpenMsg: true,
                             msg: '查詢成功',
                         });
                     } else {
                         this.setState({
                             verdictList: [],
+                            keywordList: [],
+                            keyword: search,
+                            isAutoSearch: true,
+                            verdictContentExpend: true,
+                            identityDialogOpen: false,
+                            Urlkeyword: null,
+                            demoMode: false,
                             isOpenMsg: true,
                             msg: '查無資料',
                         })
@@ -375,6 +401,13 @@ class SearchPage extends React.Component {
                 } else {
                     this.setState({
                         verdictList: [],
+                        keywordList: [],
+                        keyword: search,
+                        isAutoSearch: true,
+                        verdictContentExpend: true,
+                        identityDialogOpen: false,
+                        Urlkeyword: null,
+                        demoMode: false,
                         isOpenMsg: true,
                         msg: '查無資料',
                     })
@@ -382,16 +415,15 @@ class SearchPage extends React.Component {
             }).catch((err) => {
                 console.log(err);
                 this.setState({
+                    keyword: search,
+                    keywordList: [],
+                    isAutoSearch: true,
+                    verdictContentExpend: true,
+                    identityDialogOpen: false,
+                    Urlkeyword: null,
+                    demoMode: false,
                     isOpenMsg: true,
                     msg: '查詢失敗',
-                })
-            }).finally(() => {
-                this.setState({
-                    keyword: search,
-                    // searchAreaExpend: false,
-                    // resultAreaExpend: true,
-                    verdictContentExpend: true,
-                    Urlkeyword: null,
                 })
             })
         }
@@ -419,55 +451,85 @@ class SearchPage extends React.Component {
                 resultAreaExpend: true,
                 Urlkeyword: null,
                 isOpenMsg: true,
+                demoMode: true,
+                keywordList: ["離婚", "案例"],
                 msg: '查詢成功',
             });
         } else {
             if (keyword && keyword.length > 0) {
                 axios.post('http://35.234.24.135:3300/wordcut/jieba',
                     { "paramword": keyword }).then(res => {
-                        console.log(res.data);
                         if (res.data) {
                             axios.post('http://35.234.24.135:3200/casigo/account/fizzytfidfread',
                                 { "tfidf": res.data.result }
                             ).then(res2 => {
-                                console.log(res2.data);
                                 if (res2.data) {
-                                    this.setState({
-                                        verdictList: res2.data,
-                                        isOpenMsg: true,
-                                        msg: '查詢成功',
-                                    });
+                                    if (res2.data.length > 0) {
+                                        this.setState({
+                                            verdictList: res2.data,
+                                            keywordList: res.data.result,
+                                            demoMode: false,
+                                            searchAreaExpend: false,
+                                            resultAreaExpend: true,
+                                            Urlkeyword: null,
+                                            isOpenMsg: true,
+                                            msg: '查詢成功',
+                                        });
+                                    } else {
+                                        this.setState({
+                                            verdictList: [],
+                                            keywordList: [],
+                                            demoMode: false,
+                                            searchAreaExpend: false,
+                                            resultAreaExpend: true,
+                                            Urlkeyword: null,
+                                            isOpenMsg: true,
+                                            msg: '查無資料',
+                                        })
+                                    }
                                 } else {
                                     this.setState({
                                         verdictList: [],
+                                        keywordList: [],
+                                        demoMode: false,
+                                        searchAreaExpend: false,
+                                        resultAreaExpend: true,
+                                        Urlkeyword: null,
                                         isOpenMsg: true,
-                                        msg: '查無結果',
+                                        msg: '查無資料',
                                     })
                                 }
                             }).catch((err) => {
                                 console.log(err);
                                 this.setState({
-                                    isOpenMsg: true,
-                                    msg: '查詢失敗',
-                                })
-                            }).finally(() => {
-                                this.setState({
+                                    keywordList: [],
+                                    demoMode: false,
                                     searchAreaExpend: false,
                                     resultAreaExpend: true,
                                     Urlkeyword: null,
+                                    isOpenMsg: true,
+                                    msg: '查詢失敗',
                                 })
                             })
                         }
                     }).catch((err) => {
                         console.log(err);
                         this.setState({
+                            keywordList: [],
+                            demoMode: false,
+                            searchAreaExpend: false,
+                            resultAreaExpend: true,
+                            Urlkeyword: null,
                             isOpenMsg: true,
                             msg: '查詢失敗',
                         })
                     })
-
             } else {
                 this.setState({
+                    demoMode: false,
+                    searchAreaExpend: false,
+                    resultAreaExpend: true,
+                    Urlkeyword: null,
                     isOpenMsg: true,
                     msg: '請輸入相關詞彙或描述',
                 })
@@ -508,6 +570,7 @@ class SearchPage extends React.Component {
                 identityDialogOpen: false,
                 searchAreaExpend: true,
                 verdictContentExpend: false,
+                resultAreaExpend: false,
                 showSearchKeywordBtn: this.state.role === 0 ? true : false,
                 showSearchVerdictBtn: this.state.role === 0 ? false : true,
                 showKeywordList: false,
@@ -623,7 +686,7 @@ class SearchPage extends React.Component {
     }
 
     highlightKeywords = (str) => {
-        if (this.state.role === 0) {
+        if (this.state.keywordList && this.state.keywordList.length > 0) {
             if (new RegExp(this.state.keywordList.join("|")).test(str)) {
                 // At least one match
                 let parts = str.split(new RegExp(`(${this.state.keywordList.join("|")})`, 'gi'));
@@ -633,15 +696,15 @@ class SearchPage extends React.Component {
                     </span>)
                 } </span>;
             }
-            return <span>{str}</span>;
+        }
+        return <span>{str}</span>;
+    }
 
+    checkRole = () => {
+        if (this.state.isAutoSearch) {
+            return "匿名查詢";
         } else {
-            let parts = str.split(new RegExp(`(${this.state.keyword})`, 'gi'));
-            return <span> {parts.map((part, i) =>
-                <span key={i} style={part === this.state.keyword ? { color: "red", fontWeight: 'bold' } : {}}>
-                    {part}
-                </span>)
-            } </span>;
+            return this.state.role === 0 ? '一般民眾' : '律師';
         }
     }
 
@@ -649,8 +712,8 @@ class SearchPage extends React.Component {
         const { classes } = this.props;
 
         let indentityName = <div style={{ fontFamily: "Microsoft JhengHei" }}>
-            <span>ID︰<strong>{`${this.state.userid}`}</strong></span><br />
-            <span>身分︰<strong>{`${this.state.role === 0 ? '一般民眾' : '律師'}`}</strong></span>
+            <span>ID︰<strong>{this.state.isAutoSearch ? "匿名搜尋" : this.state.userid}</strong></span><br />
+            <span>身分︰<strong>{this.checkRole()}</strong></span>
         </div>;
 
         let title = <h2 style={{ fontFamily: "Microsoft JhengHei" }}>莫訟法律諮詢</h2>;
@@ -762,7 +825,7 @@ class SearchPage extends React.Component {
                                 aria-expanded={this.state.resultAreaExpend}
                                 aria-label="Show more"
                             >
-                                <ExpandMoreIcon />
+                                {this.state.isAutoSearch ? null : <ExpandMoreIcon />}
                             </IconButton>
                         </CardActions>
                         <Collapse in={this.state.resultAreaExpend}>
@@ -781,20 +844,26 @@ class SearchPage extends React.Component {
                                 open={this.state.dialogOpen}>
                                 <DialogTitle id="customized-dialog-title" onClose={this.handleDialogClose}>
                                     <List>
-                                        {/* <ListItem>PTT
-                                            <List>{pttLinkList}</List>
-                                        </ListItem>
-                                        <ListItem>TVBS
-                                            <List>{tvbsLinkList}</List>
-                                        </ListItem>
-                                        <ListItem>ETTODAY
-                                            <List>{ettodayLinkList}</List>
-                                        </ListItem> */}
-                                        <ListItem>Yahoo
-                                            <List>
-                                                <ListItem component='a' key={0} target="_blank" href="https://shorturl.at/izELT">【風向新聞全民開講】先生外遇要離婚？律師告訴妳如何自保</ListItem >
-                                            </List>
-                                        </ListItem>
+                                        {this.state.demoMode ?
+                                            <div>
+                                                <ListItem>Yahoo
+                                                    <List>
+                                                        <ListItem component='a' key={0} target="_blank" href="https://shorturl.at/izELT">
+                                                            【風向新聞全民開講】先生外遇要離婚？律師告訴妳如何自保</ListItem >
+                                                    </List>
+                                                </ListItem>
+                                            </div> :
+                                            <div>
+                                                <ListItem>PTT
+                                                    <List>{pttLinkList}</List>
+                                                </ListItem>
+                                                <ListItem>TVBS
+                                                    <List>{tvbsLinkList}</List>
+                                                </ListItem>
+                                                <ListItem>ETTODAY
+                                                    <List>{ettodayLinkList}</List>
+                                                </ListItem>
+                                            </div>}
                                     </List>
                                 </DialogTitle>
                             </Dialog>
@@ -832,15 +901,17 @@ class SearchPage extends React.Component {
                                         確認</Button>
                                 </DialogTitle>
                             </Dialog>
-                            <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictListClose}>
-                                返回搜尋</Button>
+                            {this.state.isAutoSearch ? null :
+                                <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictListClose}>
+                                    返回搜尋</Button>}
                         </Collapse>
                         <Collapse in={this.state.verdictContentExpend}>
                             {VerdictContent}
-                            <Button variant="contained" className={classes.margin} onClick={this.handleDialogOpen}>
-                                相關社群文章</Button>
-                            <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictContentClose}>
-                                返回內容</Button>
+                            {this.state.verdictList.length > 0 ? <Button variant="contained" className={classes.margin} onClick={this.handleDialogOpen}>
+                                相關社群文章</Button> : null}
+                            {this.state.isAutoSearch ? null :
+                                <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictContentClose}>
+                                    返回內容</Button>}
                         </Collapse>
                     </Card>
                     <Snackbar
