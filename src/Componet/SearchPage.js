@@ -343,10 +343,10 @@ class SearchPage extends React.Component {
     }
 
     autoSearch = (search) => {
-        if (search === "離婚_贍養費" || search === "離婚_外遇" || search === "老公_外遇_吵架_酗酒_家暴_虐待_離婚") {
+        if (search === "恐嚇_施暴" || search === "離婚_外遇" || search === "老公_外遇_吵架_酗酒_家暴_虐待_離婚") {
             this.setState({
-                verdictList: search === "離婚_贍養費" || "老公_外遇_吵架_酗酒_家暴_虐待_離婚" ? [testVerdict[0]] : [testVerdict[1]],
-                verdict: search === "離婚_外遇" || "老公_外遇_吵架_酗酒_家暴_虐待_離婚" ? testVerdict[0] : testVerdict[1],
+                verdictList: search === "恐嚇_施暴" ? [testVerdict[1]] : [testVerdict[0]],
+                verdict: search === "恐嚇_施暴" ? testVerdict[1] : testVerdict[0],
                 verdictContentExpend: true,
                 Urlkeyword: null,
                 isOpenMsg: true,
