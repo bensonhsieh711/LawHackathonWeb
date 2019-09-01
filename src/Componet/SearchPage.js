@@ -306,17 +306,24 @@ class SearchPage extends React.Component {
                 msg: '查詢成功',
             });
         } else {
-            axios.post('http://35.234.24.135:3300/wordcut/jieba', {
-                "paramword": this.state.keyword
-            }).then(res => {
-                if (res.data) {
-                    if (res.data.result.length > 0) {
-                        this.setState({
-                            category: res.data.result,
-                            showKeywordList: true,
-                            isOpenMsg: true,
-                            msg: '查詢成功',
-                        });
+            axios.get(`http://35.234.24.135:3300/word2vec?keyword=${this.state.keyword}`)
+                .then(res => {
+                    if (res.data) {
+                        if (res.data.result.length > 0) {
+                            this.setState({
+                                category: res.data.result,
+                                showKeywordList: true,
+                                isOpenMsg: true,
+                                msg: '查詢成功',
+                            });
+                        } else {
+                            this.setState({
+                                category: [],
+                                showKeywordList: false,
+                                isOpenMsg: true,
+                                msg: '查無資料',
+                            })
+                        }
                     } else {
                         this.setState({
                             category: [],
@@ -325,45 +332,36 @@ class SearchPage extends React.Component {
                             msg: '查無資料',
                         })
                     }
-                } else {
+                }).catch((err) => {
+                    console.log(err);
                     this.setState({
-                        category: [],
-                        showKeywordList: false,
                         isOpenMsg: true,
                         msg: '查無資料',
                     })
-                }
-            }).catch((err) => {
-                console.log(err);
-                this.setState({
-                    isOpenMsg: true,
-                    msg: '查無失敗',
                 })
-            })
         }
     }
 
-    autoSearch = (keyword) => {
-        if (keyword === "離婚A" || keyword === "離婚B") {
+    autoSearch = (search) => {
+        if (search === "離婚A" || search === "離婚B") {
             this.setState({
-                verdictList: keyword === "離婚A" ? [testVerdict[0]] : [testVerdict[1]],
-                verdict: keyword === "離婚A" ? testVerdict[0] : testVerdict[1],
-                //searchAreaExpend: false,
-                //resultAreaExpend: false,
+                verdictList: search === "離婚A" ? [testVerdict[0]] : [testVerdict[1]],
+                verdict: search === "離婚A" ? testVerdict[0] : testVerdict[1],
                 verdictContentExpend: true,
-                //keyword: keyword,
                 Urlkeyword: null,
                 isOpenMsg: true,
                 msg: '查詢成功',
             })
         } else {
-            axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
-                { "opinion": keyword, "mainText": keyword, "reason": keyword }
+            let keywordArray = search.split("_");
+            axios.post('http://35.234.24.135:3200/casigo/account/fizzytfidfread',
+                { "tfidf": keywordArray }
             ).then(res => {
                 if (res.data) {
                     if (res.data.length > 0) {
                         this.setState({
                             verdictList: res.data,
+                            verdict: res.data[0],
                             isOpenMsg: true,
                             msg: '查詢成功',
                         });
@@ -385,13 +383,14 @@ class SearchPage extends React.Component {
                 console.log(err);
                 this.setState({
                     isOpenMsg: true,
-                    msg: '查無失敗',
+                    msg: '查詢失敗',
                 })
             }).finally(() => {
                 this.setState({
-                    keyword: keyword,
-                    searchAreaExpend: false,
-                    resultAreaExpend: true,
+                    keyword: search,
+                    // searchAreaExpend: false,
+                    // resultAreaExpend: true,
+                    verdictContentExpend: true,
                     Urlkeyword: null,
                 })
             })
@@ -424,35 +423,49 @@ class SearchPage extends React.Component {
             });
         } else {
             if (keyword && keyword.length > 0) {
-                axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
-                    { "opinion": keyword, "mainText": keyword, "reason": keyword }
-                ).then(res => {
-                    if (res.data) {
+                axios.post('http://35.234.24.135:3300/wordcut/jieba',
+                    { "paramword": keyword }).then(res => {
+                        console.log(res.data);
+                        if (res.data) {
+                            axios.post('http://35.234.24.135:3200/casigo/account/fizzytfidfread',
+                                { "tfidf": res.data.result }
+                            ).then(res2 => {
+                                console.log(res2.data);
+                                if (res2.data) {
+                                    this.setState({
+                                        verdictList: res2.data,
+                                        isOpenMsg: true,
+                                        msg: '查詢成功',
+                                    });
+                                } else {
+                                    this.setState({
+                                        verdictList: [],
+                                        isOpenMsg: true,
+                                        msg: '查無結果',
+                                    })
+                                }
+                            }).catch((err) => {
+                                console.log(err);
+                                this.setState({
+                                    isOpenMsg: true,
+                                    msg: '查詢失敗',
+                                })
+                            }).finally(() => {
+                                this.setState({
+                                    searchAreaExpend: false,
+                                    resultAreaExpend: true,
+                                    Urlkeyword: null,
+                                })
+                            })
+                        }
+                    }).catch((err) => {
+                        console.log(err);
                         this.setState({
-                            verdictList: res.data,
                             isOpenMsg: true,
-                            msg: '查詢成功',
-                        });
-                    } else {
-                        this.setState({
-                            verdictList: [],
-                            isOpenMsg: true,
-                            msg: '查無結果',
+                            msg: '查詢失敗',
                         })
-                    }
-                }).catch((err) => {
-                    console.log(err);
-                    this.setState({
-                        isOpenMsg: true,
-                        msg: '查無失敗',
                     })
-                }).finally(() => {
-                    this.setState({
-                        searchAreaExpend: false,
-                        resultAreaExpend: true,
-                        Urlkeyword: null,
-                    })
-                })
+
             } else {
                 this.setState({
                     isOpenMsg: true,
@@ -554,9 +567,8 @@ class SearchPage extends React.Component {
             });
         } else {
             if (this.state.keywordList && this.state.keywordList.length > 0) {
-                let keyword = this.state.keywordList[0];
-                axios.post(`http://35.234.24.135:3200/casigo/account/fizzyread`,
-                    { "opinion": keyword, "mainText": keyword, "reason": keyword }
+                axios.post('http://35.234.24.135:3200/casigo/account/fizzytfidfread',
+                    { "tfidf": this.state.keywordList }
                 ).then(res => {
                     if (res.data) {
                         if (res.data.length === 0) {
@@ -584,7 +596,7 @@ class SearchPage extends React.Component {
                     console.log(err);
                     this.setState({
                         isOpenMsg: true,
-                        msg: '查無失敗',
+                        msg: '查詢失敗',
                     })
                 })
             } else {
