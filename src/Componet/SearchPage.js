@@ -343,10 +343,10 @@ class SearchPage extends React.Component {
     }
 
     autoSearch = (search) => {
-        if (search === "離婚A" || search === "離婚B") {
+        if (search === "離婚_贍養費" || search === "離婚_外遇") {
             this.setState({
-                verdictList: search === "離婚A" ? [testVerdict[0]] : [testVerdict[1]],
-                verdict: search === "離婚A" ? testVerdict[0] : testVerdict[1],
+                verdictList: search === "離婚_贍養費" ? [testVerdict[0]] : [testVerdict[1]],
+                verdict: search === "離婚_外遇" ? testVerdict[0] : testVerdict[1],
                 verdictContentExpend: true,
                 Urlkeyword: null,
                 isOpenMsg: true,
