@@ -671,6 +671,21 @@ class SearchPage extends React.Component {
         }
     }
 
+    getSummary = str => {
+        axios.post('http://35.234.24.135:3333/snownlp', 
+        {"paramword" : str}).then(res => {
+            if (res.data && res.data.length > 0) {
+                let summary = "";
+                res.data.forEach(item => {
+                    summary += `"${item}",`;
+                })
+                summary = summary.trim(',');
+                return summary;
+            }
+        })
+        return str;
+    }
+
     handleMutiSelectChange = (event) => {
         let array = [];
         for (let i = 0; i < event.target.value.length; i++) {
@@ -835,6 +850,7 @@ class SearchPage extends React.Component {
                                         <ListItem key={index} button>
                                             <ListItemText key={index} onClick={() => { this.handleVerdictContentOpen(verdict) }}>
                                                 {new Date(verdict.date).toLocaleDateString()}：{verdict.no} {this.convertToShortText(verdict.mainText, 15)}</ListItemText>
+                                                {/* {new Date(verdict.date).toLocaleDateString()}：{verdict.no} {this.getSummary(verdict.opinion)}</ListItemText> */}
                                         </ListItem>
                                     ]);
                                 })}
