@@ -434,7 +434,7 @@ class SearchPage extends React.Component {
     }
 
     relativeSearchOnClick = (keyword) => {
-        if (keyword === "離婚案例") {
+        if (keyword === "離婚案例" || keyword === "離婚相關法條") {
             this.setState({
                 verdictList: testVerdict,
                 searchAreaExpend: false,
@@ -855,7 +855,7 @@ class SearchPage extends React.Component {
                                             <div>
                                                 <ListItem>Yahoo
                                                     <List>
-                                                        <ListItem component='a' key={0} target="_blank" href="https://shorturl.at/izELT">
+                                                        <ListItem component='a' key={0} target="_blank" href="https://tw.news.yahoo.com/%E9%A2%A8%E5%90%91%E6%96%B0%E8%81%9E%E5%85%A8%E6%B0%91%E9%96%8B%E8%AC%9B-%E5%85%88%E7%94%9F%E5%A4%96%E9%81%87%E8%A6%81%E9%9B%A2%E5%A9%9A-%E5%BE%8B%E5%B8%AB%E5%91%8A%E8%A8%B4%E5%A6%B3%E5%A6%82%E4%BD%95%E8%87%AA%E4%BF%9D-114747973.html">
                                                             【風向新聞全民開講】先生外遇要離婚？律師告訴妳如何自保</ListItem >
                                                     </List>
                                                 </ListItem>
