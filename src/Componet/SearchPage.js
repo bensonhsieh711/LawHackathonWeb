@@ -275,8 +275,7 @@ class SearchPage extends React.Component {
             dialogOpen: false,
             isAutoSearch: this.props.match.params.keyword ? true : false,
             verdict: '',
-            //identityDialogOpen: this.props.match.params.keyword ? false : true,
-            identityDialogOpen: true,
+            identityDialogOpen: this.props.match.params.keyword ? false : true,
             //role: this.props.match.params.keyword ? 1 : 0, //0:一般民眾, 1:律師
             role: 0, //0:一般民眾, 1:律師
             showSearchVerdictBtn: false,
@@ -354,10 +353,11 @@ class SearchPage extends React.Component {
         let keywordArray = search.split("_");
         if (search === "恐嚇_施暴" || search === "離婚_外遇" || search === "老公_外遇_吵架_酗酒_家暴_虐待_離婚") {
             this.setState({
-                verdictList: search === "恐嚇_施暴" ? [testVerdict[0]] : [testVerdict[1]],
-                verdict: search === "恐嚇_施暴" ? testVerdict[0] : testVerdict[1],
+                verdictList: search === "老公_外遇_吵架_酗酒_家暴_虐待_離婚" ? testVerdict : "恐嚇_施暴" ? [testVerdict[0]] : [testVerdict[1]],
+                //verdict: search === "恐嚇_施暴" ? testVerdict[0] : testVerdict[1],
                 keywordList: keywordArray,
-                verdictContentExpend: true,
+                verdictContentExpend: false,
+                resultAreaExpend: true,
                 Urlkeyword: null,
                 isAutoSearch: true,
                 identityDialogOpen: false,
@@ -373,14 +373,9 @@ class SearchPage extends React.Component {
                     if (res.data.length > 0) {
                         this.setState({
                             verdictList: res.data,
-                            verdict: res.data[0],
+                            //verdict: res.data[0],
                             keywordList: keywordArray,
                             keyword: search,
-                            isAutoSearch: true,
-                            verdictContentExpend: true,
-                            identityDialogOpen: false,
-                            Urlkeyword: null,
-                            demoMode: false,
                             isOpenMsg: true,
                             msg: '查詢成功',
                         });
@@ -389,11 +384,6 @@ class SearchPage extends React.Component {
                             verdictList: [],
                             keywordList: [],
                             keyword: search,
-                            isAutoSearch: true,
-                            verdictContentExpend: true,
-                            identityDialogOpen: false,
-                            Urlkeyword: null,
-                            demoMode: false,
                             isOpenMsg: true,
                             msg: '查無資料',
                         })
@@ -403,11 +393,6 @@ class SearchPage extends React.Component {
                         verdictList: [],
                         keywordList: [],
                         keyword: search,
-                        isAutoSearch: true,
-                        verdictContentExpend: true,
-                        identityDialogOpen: false,
-                        Urlkeyword: null,
-                        demoMode: false,
                         isOpenMsg: true,
                         msg: '查無資料',
                     })
@@ -417,13 +402,16 @@ class SearchPage extends React.Component {
                 this.setState({
                     keyword: search,
                     keywordList: [],
-                    isAutoSearch: true,
-                    verdictContentExpend: true,
-                    identityDialogOpen: false,
-                    Urlkeyword: null,
-                    demoMode: false,
                     isOpenMsg: true,
                     msg: '查詢失敗',
+                })
+            }).finally(() => {
+                this.setState({
+                    isAutoSearch: true,
+                    verdictContentExpend: false,
+                    resultAreaExpend: true,
+                    Urlkeyword: null,
+                    demoMode: false,
                 })
             })
         }
@@ -672,17 +660,17 @@ class SearchPage extends React.Component {
     }
 
     getSummary = str => {
-        axios.post('http://35.234.24.135:3333/snownlp', 
-        {"paramword" : str}).then(res => {
-            if (res.data && res.data.length > 0) {
-                let summary = "";
-                res.data.forEach(item => {
-                    summary += `"${item}",`;
-                })
-                summary = summary.trim(',');
-                return summary;
-            }
-        })
+        axios.post('http://35.234.24.135:3333/snownlp',
+            { "paramword": str }).then(res => {
+                if (res.data && res.data.length > 0) {
+                    let summary = "";
+                    res.data.forEach(item => {
+                        summary += `"${item}",`;
+                    })
+                    summary = summary.trim(',');
+                    return summary;
+                }
+            })
         return str;
     }
 
@@ -850,7 +838,7 @@ class SearchPage extends React.Component {
                                         <ListItem key={index} button>
                                             <ListItemText key={index} onClick={() => { this.handleVerdictContentOpen(verdict) }}>
                                                 {new Date(verdict.date).toLocaleDateString()}：{verdict.no} {this.convertToShortText(verdict.mainText, 15)}</ListItemText>
-                                                {/* {new Date(verdict.date).toLocaleDateString()}：{verdict.no} {this.getSummary(verdict.opinion)}</ListItemText> */}
+                                            {/* {new Date(verdict.date).toLocaleDateString()}：{verdict.no} {this.getSummary(verdict.opinion)}</ListItemText> */}
                                         </ListItem>
                                     ]);
                                 })}
@@ -925,9 +913,8 @@ class SearchPage extends React.Component {
                             {VerdictContent}
                             {this.state.verdictList.length > 0 ? <Button variant="contained" className={classes.margin} onClick={this.handleDialogOpen}>
                                 相關社群文章</Button> : null}
-                            {this.state.isAutoSearch ? null :
-                                <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictContentClose}>
-                                    返回內容</Button>}
+                            <Button variant="contained" color="primary" className={classes.margin} onClick={this.handleVerdictContentClose}>
+                                返回查詢結果</Button>
                         </Collapse>
                     </Card>
                     <Snackbar
