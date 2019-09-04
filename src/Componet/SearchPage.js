@@ -837,8 +837,9 @@ class SearchPage extends React.Component {
                                     return ([
                                         <ListItem key={index} button>
                                             <ListItemText key={index} onClick={() => { this.handleVerdictContentOpen(verdict) }}>
-                                                {new Date(verdict.date).toLocaleDateString()}：{verdict.no} {this.convertToShortText(verdict.mainText, 15)}</ListItemText>
-                                            {/* {new Date(verdict.date).toLocaleDateString()}：{verdict.no} {this.getSummary(verdict.opinion)}</ListItemText> */}
+                                                {new Date(verdict.date).toLocaleDateString()}，{verdict.no}，{verdict.summary === "" ? this.convertToShortText(verdict.mainText, 15)
+                                                    : verdict.summary}
+                                            </ListItemText>
                                         </ListItem>
                                     ]);
                                 })}
