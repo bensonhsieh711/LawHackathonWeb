@@ -31,6 +31,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const BootstrapInput = withStyles(theme => ({
     root: {
@@ -112,7 +113,7 @@ const styles = theme => ({
     },
     topic: {
         //color: 'red',
-    }
+    },
 });
 
 const ITEM_HEIGHT = 48;
@@ -288,6 +289,7 @@ class SearchPage extends React.Component {
             isOpenMsg: false,
             category: [],
             demoMode: false,
+            isLoading: false,
         };
         //console.log(this.props)
     }
@@ -311,6 +313,10 @@ class SearchPage extends React.Component {
                 msg: '查詢成功',
             });
         } else {
+            this.setState({
+                isLoading: true,
+                showKeywordList: false,
+            });
             axios.get(`http://35.234.24.135:3300/word2vec?keyword=${this.state.keyword}`)
                 .then(res => {
                     if (res.data && res.data.result !== "w2v error") {
@@ -344,9 +350,13 @@ class SearchPage extends React.Component {
                     console.log(err);
                     this.setState({
                         keywordList: [],
+                        category: [],
+                        showKeywordList: false,
                         isOpenMsg: true,
                         msg: '查無資料',
                     })
+                }).finally(() => {
+                    this.setState({ isLoading: false })
                 })
         }
     }
@@ -566,7 +576,9 @@ class SearchPage extends React.Component {
                 showKeywordList: false,
                 keyword: '',
                 keywordList: [],
-                verdictList: []
+                verdictList: [],
+                isOpenMsg: true,
+                msg: '登入成功'
             })
         } else {
             this.setState({
@@ -632,10 +644,11 @@ class SearchPage extends React.Component {
                             })
                         } else {
                             this.setState({
-                                msg: '查詢成功',
                                 searchAreaExpend: false,
                                 resultAreaExpend: true,
-                                verdictList: res.data
+                                verdictList: res.data,
+                                isOpenMsg: true,
+                                msg: '查詢成功'
                             })
                         }
                     } else {
@@ -659,21 +672,6 @@ class SearchPage extends React.Component {
                 })
             }
         }
-    }
-
-    getSummary = str => {
-        axios.post('http://35.234.24.135:3333/snownlp',
-            { "paramword": str }).then(res => {
-                if (res.data && res.data.length > 0) {
-                    let summary = "";
-                    res.data.forEach(item => {
-                        summary += `"${item}",`;
-                    })
-                    summary = summary.trim(',');
-                    return summary;
-                }
-            })
-        return str;
     }
 
     handleMutiSelectChange = (event) => {
@@ -779,6 +777,7 @@ class SearchPage extends React.Component {
                                         />
                                     </FormControl>
                                     <FormControl className={classes.margin}>
+                                        {this.state.isLoading ? <CircularProgress /> : null}
                                         <InputLabel htmlFor="search-customized-select" className={classes.bootstrapFormLabel} />
                                         {this.state.showKeywordList === true ?
                                             <FormControl className={classes.margin}>
